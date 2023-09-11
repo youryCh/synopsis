@@ -71,3 +71,27 @@ INSERT INTO users (name, age, is_admin)
 
 INSERT INTO table (field_1) VALUES ('value');
 ```
+
+*example:*
+```
+-- вставка сразу нескольких строк
+
+INSERT INTO table (field_1, field_2) VALUES
+  ('JS', 1), ('PHP', 2), ('PY', 3);
+```
+
+*example:*
+```
+-- вставка всех полей
+-- если не указаны поля это тоже что перечислить все поля
+
+INSERT INTO table VALUES ('JS', 'PHP', 'PY');
+```
+
+```SELECT``` - извлечь данные, посмотреть содержимое
+
+*example:*
+```
+-- * - все данные
+SELECT * FROM table;
+```
