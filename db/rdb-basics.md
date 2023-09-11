@@ -66,7 +66,8 @@ INSERT INTO users (name, age, is_admin)
 
 *example:*
 ```
-// *частичное заполнение полей*
-// *остальные поля строки будут null*
+-- частичное заполнение полей
+-- остальные поля строки будут null
+
 INSERT INTO table (field_1) VALUES ('value');
 ```
