@@ -27,25 +27,25 @@ CREATE TABLE courses (
 );
 ```
 
-```DROP TABLE <name>``` - удалить таблицу
+```DROP TABLE <name>;``` - удалить таблицу
 
 ## Типы данных
 
 - String:
-  - varchar() - (varying character) с ограничением максимальной длины
-  - text - без ограничения
+  - ```varchar()``` - (varying character) с ограничением максимальной длины
+  - ``text`` - без ограничения
 
 - Number:
-  - integer - целое число
-  - bigint - большое целое число
+  - `integer` - целое число
+  - ```bigint``` - большое целое число
 
 - Date:
-  - date - дата без времени
-  - timestamp - дата/время без часового пояса
-  - time - время
+  - ```date``` - дата без времени
+  - ```timestamp``` - дата/время без часового пояса
+  - ```time``` - время
 
 - Boolean:
-  - TRUE (или 't', 'true', 'y', 'yes', 'on', '1')
-  - FALSE (или 'f', 'false', 'n', 'no', 'off', '0')
+  - ```TRUE``` (или 't', 'true', 'y', 'yes', 'on', '1')
+  - ```FALSE``` (или 'f', 'false', 'n', 'no', 'off', '0')
 
 ```NULL``` - значение не заполненного поля любого типа
