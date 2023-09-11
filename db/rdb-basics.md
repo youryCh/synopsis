@@ -46,6 +46,24 @@ CREATE TABLE courses (
 
 - Boolean:
   - ```TRUE``` (или 't', 'true', 'y', 'yes', 'on', '1')
-  - ```FALSE``` (или 'f', 'false', 'n', 'no', 'off', '0')
+  - ``FALSE`` (или 'f', 'false', 'n', 'no', 'off', '0')
 
 ```NULL``` - значение не заполненного поля любого типа
+
+## Вставка и модификация
+
+> **DML** - (Data Manipulation Language) подмножество SQL для работы с данными;
+            включает:
+              - INSERT
+              - UPDATE
+              - DELETE
+
+`INSERT INTO <table> (field) VALUES ('value');` - вставка данных
+
+*example:*
+`
+INSERT INTO users (name, age, is_admin)
+  VALUES ('Ann', 38, FALSE);
+`
+
+> Каждый INSERT создаёт новую запись (строку) в таблице
