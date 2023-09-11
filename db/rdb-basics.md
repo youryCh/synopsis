@@ -52,8 +52,7 @@ CREATE TABLE courses (
 
 ## Вставка и модификация
 
-> **DML** - (Data Manipulation Language) подмножество SQL для работы с данными;
->           включает: INSERT, UPDATE, DELETE
+> **DML** - (Data Manipulation Language) подмножество SQL для работы с данными; включает: INSERT, UPDATE, DELETE
 
 ```INSERT INTO <table> (field) VALUES ('value');``` - вставка данных
 
@@ -64,3 +63,10 @@ INSERT INTO users (name, age, is_admin)
 ```
 
 > Каждый INSERT создаёт новую запись (строку) в таблице
+
+*example:*
+```
+// *частичное заполнение полей*
+// *остальные поля строки будут null*
+INSERT INTO table (field_1) VALUES ('value');
+```
