@@ -8,7 +8,14 @@
 
 > [**pgAdmin**](https://www.pgadmin.org/) - free postgres tool
 
+> **scheme** - пространство имен для группировки таблиц (public - by default)
 
+## Полезные команды psql
+
+```\d``` - список таблиц
+```\d <table_name>``` - структура таблицы
+```\l``` - список всех db
+```\?``` - help
 
 ## SQL
 
@@ -67,7 +74,7 @@ INSERT INTO users (name, age, is_admin)
   VALUES ('Ann', 38, FALSE);
 ```
 
-> Каждый INSERT создаёт новую запись (строку) в таблице
+Каждый INSERT создаёт новую запись (строку) в таблице
 
 *example:*
 ```
@@ -99,4 +106,23 @@ INSERT INTO table VALUES ('JS', 'PHP', 'PY');
 ```
 -- * - все данные
 SELECT * FROM table;
+```
+
+```UPDATE <table_name> SET field = 'value' WHERE field = 'value';``` - обновление записи в таблице
+
+Обновятся все записи, удовлетворяющие условию после WHERE.
+Повторные вызовы того же UPDATE не сделают никаких изменений.
+
+*example:*
+```
+-- обновление сразу нескольких полей
+
+UPDATE users SET name = 'John', age = 44 WHERE name = 'Ann';
+```
+
+*example:*
+```
+-- без WHERE обновит поля во всех строках!
+
+UPDATE users SET name = 'John';
 ```
