@@ -8,6 +8,7 @@
 
 > [**pgAdmin**](https://www.pgadmin.org/) - free postgres tool
 
+---
 
 ## SQL
 
@@ -29,6 +30,8 @@ CREATE TABLE courses (
 
 ```DROP TABLE <name>;``` - удалить таблицу
 
+---
+
 ## Типы данных
 
 - String:
@@ -49,6 +52,8 @@ CREATE TABLE courses (
   - ``FALSE`` (или 'f', 'false', 'n', 'no', 'off', '0')
 
 ```NULL``` - значение не заполненного поля любого типа
+
+---
 
 ## Вставка и модификация
 
