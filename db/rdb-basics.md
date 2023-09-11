@@ -40,8 +40,6 @@ CREATE TABLE courses (
 
 ```DROP TABLE <name>;``` - удалить таблицу
 
-
-
 ## Типы данных
 
 - String:
@@ -63,8 +61,6 @@ CREATE TABLE courses (
 
 ```NULL``` - значение не заполненного поля любого типа
 
-
-
 ## Вставка и модификация
 
 > **DML** - (Data Manipulation Language) подмножество SQL для работы с данными;  
@@ -78,7 +74,7 @@ INSERT INTO users (name, age, is_admin)
   VALUES ('Ann', 38, FALSE);
 ```
 
-Каждый INSERT создаёт новую запись (строку) в таблице
+> Каждый INSERT создаёт новую запись (строку) в таблице
 
 *example:*
 ```
@@ -114,8 +110,8 @@ SELECT * FROM table;
 
 ```UPDATE <table_name> SET field = 'value' WHERE field = 'value';``` - обновление записи в таблице
 
-Обновятся все записи, удовлетворяющие условию после WHERE.  
-Повторные вызовы того же UPDATE не сделают никаких изменений.
+> Обновятся все записи, удовлетворяющие условию после WHERE.  
+> Повторные вызовы того же UPDATE не сделают никаких изменений.
 
 *example:*
 ```
