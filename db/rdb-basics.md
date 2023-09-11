@@ -13,8 +13,11 @@
 ## Полезные команды psql
 
 ```\d``` - список таблиц
+
 ```\d <table_name>``` - структура таблицы
+
 ```\l``` - список всех db
+
 ```\?``` - help
 
 ## SQL
@@ -64,7 +67,8 @@ CREATE TABLE courses (
 
 ## Вставка и модификация
 
-> **DML** - (Data Manipulation Language) подмножество SQL для работы с данными; включает: INSERT, UPDATE, DELETE
+> **DML** - (Data Manipulation Language) подмножество SQL для работы с данными;  
+>           включает: INSERT, UPDATE, DELETE
 
 ```INSERT INTO <table> (field) VALUES ('value');``` - вставка данных
 
@@ -110,7 +114,7 @@ SELECT * FROM table;
 
 ```UPDATE <table_name> SET field = 'value' WHERE field = 'value';``` - обновление записи в таблице
 
-Обновятся все записи, удовлетворяющие условию после WHERE.
+Обновятся все записи, удовлетворяющие условию после WHERE.  
 Повторные вызовы того же UPDATE не сделают никаких изменений.
 
 *example:*
