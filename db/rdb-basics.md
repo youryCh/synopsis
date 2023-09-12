@@ -39,6 +39,10 @@ CREATE TABLE courses (
 ```
 
 ```DROP TABLE <name>;``` - удалить таблицу
+*example:*
+```
+DROP TABLE IF EXISTS users;
+```
 
 ## Типы данных
 
@@ -82,14 +86,12 @@ INSERT INTO users (name, age, is_admin)
 ```
 -- частичное заполнение полей
 -- остальные поля строки будут null
-
 INSERT INTO table (field_1) VALUES ('value');
 ```
 
 *example:*
 ```
 -- вставка сразу нескольких строк
-
 INSERT INTO table (field_1, field_2) VALUES
   ('JS', 1), ('PHP', 2), ('PY', 3);
 ```
@@ -98,7 +100,6 @@ INSERT INTO table (field_1, field_2) VALUES
 ```
 -- вставка всех полей
 -- если не указаны поля это тоже что перечислить все поля
-
 INSERT INTO table VALUES ('JS', 'PHP', 'PY');
 ```
 
@@ -121,27 +122,23 @@ SELECT * FROM table;
 *example:*
 ```
 -- обновление сразу нескольких полей
-
 UPDATE users SET name = 'John', age = 44 WHERE name = 'Ann';
 ```
 
 *example:*
 ```
 -- без WHERE обновит поля во всех строках!
-
 UPDATE users SET name = 'John';
 ```
 
 *example:*
 ```
 -- использование сравнения и логических операций AND OR
-
 UPDATE users SET name = 'Ann' WHERE age > 18;
 
 UPDATE users SET name = 'John' WHERE name = 'Ann' AND age < 40;
 
 -- использование скобок для приоритизации
-
 UPDATE users SET name = 'Ann' WHERE (age > 20 AND age < 40); OR age = 65;
 ```
 
@@ -172,7 +169,6 @@ TRUNCATE users;
 SELECT * FROM users;
 
 -- порядок полей в выводе соответствует порядку в запросе
-
 SELECT name, age FROM users;
 
 SELECT * FROM user WHERE birth_date > '10.01.1988';
@@ -194,7 +190,6 @@ SELECT * FROM users LIMIT 30;
 SELECT * FROM users ORDER BY age DESC;
 
 -- длинные запросы форматируют
-
 SELECT
   name,
   age
@@ -203,3 +198,19 @@ WHERE age > 18
 ORDER BY age
 LIMIT 10;
 ```
+
+## Реляционная модель данных
+
+> Популярные представления данных: 
+> - иерархическая модель
+> - сетевая модель
+> - реляционная модель
+
+> **Иерархическая модель** - данные представлены в виде дерева, где дочерние элементы зависят от родительских;  
+> сложно представить элементы с несколькими родителями.
+
+> **Сетевая модель** - представлена графом, позволяет иметь несколько предков;  
+> недостаток - алгоритм выборки данных связан со структурой данных.
+
+> [**Реляционная модель**](https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F_%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85) - данные это набор отношений.
+
