@@ -162,3 +162,44 @@ DELETE FROM users WHERE name = 'Ann';
 ```
 TRUNCATE users;
 ```
+
+## Select data
+
+> [**SELECT**](https://www.postgresql.org/docs/current/sql-select.html) - выборка данных из таблиц
+
+*example:*
+```
+SELECT * FROM users;
+
+-- порядок полей в выводе соответствует порядку в запросе
+
+SELECT name, age FROM users;
+
+SELECT * FROM user WHERE birth_date > '10.01.1988';
+```
+
+> LIMIT - ограничивает количество записей в выборке.  
+> Пагинация лучше делать в запросе к базе, а не в коде.
+
+*example:*
+```
+SELECT * FROM users LIMIT 30;
+```
+
+> ORDER BY - упорядочить вывод; SQL не гарантирует упорядоченность в выводе;  
+> по умолчанию прямой порядок, DESC - обратный порядок.
+
+*example:*
+```
+SELECT * FROM users ORDER BY age DESC;
+
+-- длинные запросы форматируют
+
+SELECT
+  name,
+  age
+FROM users
+WHERE age > 18
+ORDER BY age
+LIMIT 10;
+```
