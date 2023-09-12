@@ -66,6 +66,8 @@ CREATE TABLE courses (
 > **DML** - (Data Manipulation Language) подмножество SQL для работы с данными;  
 >           включает: INSERT, UPDATE, DELETE
 
+> [**INSERT**](https://www.postgresql.org/docs/current/sql-insert.html) - вставить строку в таблицу
+
 ```INSERT INTO <table> (field) VALUES ('value');``` - вставка данных
 
 *example:*
@@ -107,11 +109,14 @@ INSERT INTO table VALUES ('JS', 'PHP', 'PY');
 -- * - все данные
 SELECT * FROM table;
 ```
+### Обновление данных
 
-```UPDATE <table_name> SET field = 'value' WHERE field = 'value';``` - обновление записи в таблице
+> [**UPDATE**](https://www.postgresql.org/docs/current/sql-update.html) - обновить строки
 
 > Обновятся все записи, удовлетворяющие условию после WHERE.  
 > Повторные вызовы того же UPDATE не сделают никаких изменений.
+
+```UPDATE <table_name> SET field = 'value' WHERE field = 'value';``` - обновление записи в таблице
 
 *example:*
 ```
@@ -125,4 +130,35 @@ UPDATE users SET name = 'John', age = 44 WHERE name = 'Ann';
 -- без WHERE обновит поля во всех строках!
 
 UPDATE users SET name = 'John';
+```
+
+*example:*
+```
+-- использование сравнения и логических операций AND OR
+
+UPDATE users SET name = 'Ann' WHERE age > 18;
+
+UPDATE users SET name = 'John' WHERE name = 'Ann' AND age < 40;
+
+-- использование скобок для приоритизации
+
+UPDATE users SET name = 'Ann' WHERE (age > 20 AND age < 40); OR age = 65;
+```
+
+### Удаление данных
+
+> [**DELETE**](https://www.postgresql.org/docs/current/sql-delete.html)
+
+> Без указания WHERE удалит все поля!
+
+*example:*
+```
+DELETE FROM users WHERE name = 'Ann';
+```
+
+> [**TRUNCATE**](https://www.postgresql.org/docs/current/sql-truncate.html) - для полной очистки таблицы/таблиц.
+
+*example:*
+```
+TRUNCATE users;
 ```
