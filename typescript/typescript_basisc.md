@@ -24,3 +24,25 @@ npx tsc index.ts
 
 > **Контекстная типизация** - (Contextual typing) автоматический вывод типов аргументов функции, в зависимости от контекста определения анонимной функции.
 
+> **Enum** - перечисление; после компиляции становится js объектом.
+```
+enum Status {
+  opened,
+  closed
+}
+```
+
+> **Type Alias** - псевдоним для составного типа; способ удобно сократить запись типа.
+
+```
+type User = {
+  name: string;
+  age: number;
+  getName(name: string): string;
+};
+
+type Input = string | number | null;
+
+// описание типа функции отличается от описания типа метода объекта
+type Callback = (num: number) =>  void;
+```
