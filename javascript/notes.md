@@ -2,3 +2,14 @@
 
 ```for (let i = 0; i < 10; i += 1) {}```
 ___
+
+> [**Object.hasOwn()**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn) - замена Object.hasOwnProperty(); вернёт true если объект имеет собственное свойство, вернёт false если свойство наследованное или не существует в объекте.
+
+```
+const obj = {property: 'value'};
+Object.hasOwn(obj, 'property'); // true
+
+const arr = [1, 2, 3];
+Object.hasOwn(arr, 2); // true
+Object.hasOwn(arr, 3); // false элемента с индексом 3 нет
+```
