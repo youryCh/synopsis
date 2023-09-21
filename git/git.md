@@ -5,7 +5,7 @@
 ```git --version``` - текущая версия установленного git
 
 ___
-## Глобальный конфиг
+## Глобальный/локальный конфиг
 
 ```git config --list``` - посмотреть текущий конфиг
 
@@ -14,6 +14,8 @@ ___
 ```git config --global user.email <email>``` - установить/посмотреть email
 
 ```git config --global color.ui <auto>``` - установить цветовую схему
+
+`git config --local` - локальные настройки, доступны в каждом конкретном репозитории.
 
 ___
 
@@ -101,6 +103,8 @@ git commit -am 'message'
 
 `git shortlog` - сокращённый лог из одних commit message.
 
+`git show <hash>` - развёрнутый лог по одному коммиту, с diff.
+
 **Навигация**:
   - `q` - quit
   - `f, space` - forward
@@ -133,10 +137,18 @@ git grep synopsis $(git rev-list --all)
 `git clean` - удалить не индексированные изменения из рабочей директории.
   - `-f` - force
   - `-d` - directory
+  - `-X` - remove gitignore files
+  - `-n` - имитирует удаление, покажет что будет удалено
 
 ```
 // удалить все не индексированные изменения
 git clean -fd
+
+// удалить node_modules
+git clean -fdX
+
+// посмотреть что будет удалено
+git clean -d -n
 ```
 
 `git restore <file>` - отмена изменений не индексированного файла.
@@ -207,11 +219,25 @@ node_modules/
 doc/**/*.txt
 ```
 
-`git rm --cached <file>` - [link](https://www.atlassian.com/ru/git/tutorials/undoing-changes/git-rm) удалить файл из списка отслеживаемых; команда противоположная git add; сам файл останется.
+`git rm --cached <file>` - [doc](https://www.atlassian.com/ru/git/tutorials/undoing-changes/git-rm) удалить файл из списка отслеживаемых; команда противоположная git add; сам файл останется.
 
 
 ## Stash
 
 > **stash** - хранилище внутри /.git, в которое можно спрятать изменения и восстановить при необходимости; например чтобы изменения не попали в коммит.
 
-`git stash` - [link](https://www.atlassian.com/ru/git/tutorials/saving-changes/git-stash)прячет все изменённые файлы (индексированные и нет)
+`git stash` - [doc](https://www.atlassian.com/ru/git/tutorials/saving-changes/git-stash) прячет все изменённые файлы (индексированные, отслеживаемые но не индексированные; не сохранит: новые файлы, игнорируемые).
+  - `-u` - сохранит и неиндексированные новые файлы
+  - `--all` - сохранит всё, в т.ч. игнорируемые
+
+`git stash pop` - восстановить из stash
+
+> Stash организован как **стек** (LIFO), каждый `git stash pop` извлекает последний сохранённый stash, удаляя его из списка.
+
+`git stash list` - список всех stash
+
+`git stash clear` - удалить всё в stash
+
+`git stash apply stash@{n}` - восстановит изменения из конкретного стеша (n - в git stash list).
+
+`git stash branch <name>` - создаст ветку и восстановит туда изменения.
