@@ -241,3 +241,14 @@ doc/**/*.txt
 `git stash apply stash@{n}` - восстановит изменения из конкретного стеша (n - в git stash list).
 
 `git stash branch <name>` - создаст ветку и восстановит туда изменения.
+
+___
+
+`git remote -v` - список подключённых remote repo.
+
+`git remote add origin <remote_repo_url>` - добавить remote repo.
+
+`git remote set-url origin <url>` - замена remote repo url.
+
+___
+
