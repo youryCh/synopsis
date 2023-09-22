@@ -1,4 +1,5 @@
 ### Создать новый репозиторий
+#### Вариант 1:
 - создать локальный репозиторий (git init)
 - создать новый удалённый репозиторий (без readme), копировать ssh
 - в локальном репозитории:
@@ -9,6 +10,15 @@
   ```
   `git branch -M main` - переименование ветки master в main (BLM reasons); с какой-то новой версии git это не нужно
 
+#### Вариант 2:
+- создать рабочую директорию (имя будет именем репозитория)
+- из этой директории `git init`
+- добавить README.md
+- `git add .`
+- `git commit -m 'Initial'`
+- варианты пуша:
+    - кнопка Publish branch в VSC (перенаправит в Github, предложит опубликовать public/private repo)
+    - `git remote add origin <remote_repo_url>` + `git push -u origin main/master`
 ___
 
 ### Заменить локальную ссылку на remote repo
