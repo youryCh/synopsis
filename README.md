@@ -1,2 +1,2 @@
 # synopsis
-Synopsis on various web technologies
+Synopsis on various web technologies.
