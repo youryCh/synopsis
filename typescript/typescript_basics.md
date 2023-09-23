@@ -48,3 +48,13 @@ type Callback = (num: number) =>  void;
 ```
 
 > **any** - специальный тип, используется когда проверка типов не нужна, или когда ts не может вывести тип автоматически.
+
+> **export/import type** - специальный синтаксис для экспорта/импорта только типов.
+```
+export type User = {
+  name: string;
+  age: number
+};
+
+import type { User } from './user';
+```
