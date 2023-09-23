@@ -379,3 +379,12 @@ ___
 по сути pull - это шорткат для fetch + merge.
 
 ___
+
+## Git version update
+
+`git -v` - current version.
+
+`git update-git-for-windows` - проверит текущую версию, покажет доступную.
+
+___
+

@@ -46,3 +46,14 @@ ___
 2. Выполняем `git cherry-pick <hash>` на ветке, в которую надо перенести коммит.
 
 ___
+
+## Доступ к git info из кода
+
+```
+process.env.GIT_VERSION
+            GIT_COMMITHASH
+            GIT_BRANCH
+```
+
+___
+
