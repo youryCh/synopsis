@@ -59,3 +59,83 @@ ___
 
 ___
 
+`chrome://about` - доступ к апи из адресной строки.
+
+___
+
+## Браузерные движки. Layout engine
+
+> **WebKit** - Safari, Chrome (до 2013).
+
+> **Blink** - Chromium, Chrome (from 28 version), Edge (from 79 version), Opera (from 15), Yandex Browser.  
+> Создан на основе WebKit.
+
+> **Gecko** - Firefox. Mozilla opensource engine. 
+
+> Браузерный движок преобразует html/css код в интерактивное изображение на экране.  
+> Предоставляет свойства и методы для работы с веб-страницей.
+
+___
+
+## Chromium
+
+> **Chromium** - opensource браузер, разработанный Google в коллаборации с Opera, Yandex, Nvidia, Microsoft.  
+> На его основе сделан Chrome. Chromium - opensource, в отличии от Chrome.  
+> Chromium можно рассматривать как альфа-версию Chrome, используется для горячего внедрения новых фич.
+
+> С 2013 Chromium, Chrome, Chrome OS перешли на движок Blink, который по сути форк WebKit от Apple.
+
+___
+
+## Full height screenshot
+
+- `CTRL+SHIFT+P` - in DevTools
+- `screenshot` - ввести в поиск
+
+___
+
+`SHIFT+ENTER` - перенос строки в консоли.
+
+___
+
+## Local Storage
+
+> Локальное хранилище браузера.  
+> Для каждого домена отдельное.  
+> Размер 5-10 mb.  
+> Данные хранятся в парах key-value.
+
+> Методы:
+>   - `getItem()`
+>   - `setItem()`
+>   - `clear()`
+>   - `removeItem()`
+
+```
+// example
+localStorage.getItem('key');
+
+localStorage.someKey;
+
+localStorage.setItem('key', 'value');
+```
+
+___
+
+## WebAssembly
+
+> Браузерная технология, позволяет запускать в веб-приложении код, написанный на разных языках. Имеет почти нативную скорость.
+
+> **webAssembly** - низкоуровневый ассемблерный язык, имеет читабильный текстовый формат. Код на wasm будет соблюдать политики безопасности браузера.
+
+Использование wasm:
+- портирование приложения на С/С++
+- код на уровне сборки
+- приложение на Rust
+
+> **Emscripten** - компилятор С/С++ в wasm; компилирует код в файл .wasm для запуска модуля в html документе.
+
+> Wasm-код не может напрямую обращаться к web-api, только через js-код (в будущем планируется).
+
+___
+
