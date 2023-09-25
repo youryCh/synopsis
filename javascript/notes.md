@@ -13,3 +13,23 @@ const arr = [1, 2, 3];
 Object.hasOwn(arr, 2); // true
 Object.hasOwn(arr, 3); // false элемента с индексом 3 нет
 ```
+
+___
+
+`.filter(Boolean)` - delete false elements from array; same as `.filter(el => Boolean(el))`.
+
+___
+
+`@deprecated` - для устаревших методов в jsDoc.
+
+```
+/**
+* Some function
+* @deprecated
+*
+* @param ...
+*/
+```
+
+___
+
