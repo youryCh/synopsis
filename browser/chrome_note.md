@@ -156,3 +156,51 @@ ___
 **скриншот элемента** - выделить нужный элемент в Elements -> `CTRL+SHIFT+P` -> `capture node screenshot`.
 
 **развернуть все ноды в Elements** - `ALT+click`.
+
+___
+
+## CORS
+
+> **CORS** - Cross Origin Resource Sharing; политика запрещает междоменные запросы.
+
+Браузер различает **два вида** запросов:
+- простые  
+- сложные  
+
+#### Простые запросы
+
+> methods: GET, POST, HEAD  
+> headers:  
+> - `Accept`  
+> - `Accept-Language`  
+> - `Content-Language`  
+> - `Content-Type:`  
+>   - `application/x-www-form-urlencoded`  
+>   - `multipart/form-data`  
+>   - `text/plain`  
+
+> Простые запросы отправляются сразу с заголовком Origin, а для остальных запросов браузер  
+> отправляет preflight-запрос (предзапрос), спрашивая у сервера разрешения.
+
+> **Preflight запрос** - это запрос методом OPTIONS; содержит запрашиваемый метод и непростые  
+> запрашиваемые заголовки.  
+> `Access-Control-Request-Method`  
+> `Access-Control-Request-Headers`  
+>
+> Сервер отвечает 200 OK (или нет) со списком разрешённых методов и заголовков, а также  
+> время кеширования разрешения.
+
+#### CORS error
+
+> Ошибки возникают если отличается домен приложения и запрашиваемого ресурса.
+
+> Для снятия CORS ограничений используются специальные заголовки:  
+> - server:  
+>   - `Access-Control-Allow-Origin`  
+>   - `Access-Control-Allow-Methods`  
+> - client:  
+>   - `Access-Control-Request-Method`  
+>   - `Access-Control-Request-Headers`  
+
+___
+
