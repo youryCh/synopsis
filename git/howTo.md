@@ -57,3 +57,37 @@ process.env.GIT_VERSION
 
 ___
 
+## Push error
+
+Без этих настроек не будет доступа пушить в удалённый репозиторий.
+
+`git config --global user.name 'name'`
+
+`git config --global user.email 'email'`
+
+___
+
+## Добавить SSH-key
+
+В bash:
+- `cd ~`
+- `ssh-keygen` (сгенерит пару приватный/публичный)
+- `cat ~/.ssh/id_rsa.pub | clip` (либо руками скопировать из id_rsa.pub)
+
+В GitHub/GitLab:
+- открыть Settings (Edit profile в GitLub)
+- в SSH keys создать новый ключ и вставить содержимое паблик-ключа
+
+> Текущий ключ можно посмотреть в `C:/users/yuri/.ssh/id_rsa.pub`
+
+___
+
+## Быстро клонировать репозиторий
+
+- копировать ссылку (SSH/HTTP) нужного репозитория
+- создать директорию с названием проекта
+- ПКМ -> Git Bush Here
+- `git clone <вставить_ссылку>`
+
+___
+
