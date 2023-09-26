@@ -19,3 +19,73 @@ ___
 
 ___
 
+> **Hydration** - гидратация; это когда React связывает отрисованные DOM-элементы с js-кодом,  
+> т.е. делает UI интерактивным.
+
+___
+
+## SOLID in React
+
+> SOLID позволяет писать более читабельный, расширяемый, поддерживаемый и тестируемый код.
+
+### **SRP - Single Responsibility Principle**
+> Every class should have only one responsibility (i.e. do exactly only one thing).
+> 
+> В React это относится к компонентам и функциям.  
+> По сути это про разбиение большого компонента на более мелкие по логическому принципу.
+
+> Пример:  
+> Если в компоненте есть state и useEffect, это можно вынести в кастомный хук.
+
+### **OCP - Open-Closed Principle**
+
+> Software entities should be open for extension, but closed for modification.
+>
+> Если для расширения функционала компонента приходится его изменять, значит компонент  
+> нарушает OCP.
+
+> Пример:  
+> Можно вынести изменяемую часть в children.
+
+### **LSP - Liskov Substitution Principle**
+
+> Subtype objects should be substitutable for supertype objects.
+>
+> Типа если компонент содержит input, то он должен расширять интерфейс инпута.
+
+```
+// Пример:
+interface Props extends InputHTMLAttributes {
+  isLarge?: boolean;
+}
+
+const SearchInput = (props: Props) => {
+  const { isLarge, ...restProps } = props;
+
+  return <Input { ...restProps } />;
+};
+```
+
+### **ISP - Interface Segregation Principle**
+
+> Clients should not depend upon interfaces that they don't use.
+>
+> React-компонент не должны зависеть от props, которые он не использует.
+
+> Пример:  
+> Использовать ...restProps для передачи в children.
+
+### **DIP - Dependency Inversion Principle**
+
+> An entity should depend upon abstractions, not concretions.
+>
+> Делать компоненты более абстрактными и независимыми и позволять им расширяться, а не изменяться.
+
+> Пример:  
+> В форме не должен быть захардкожен url - это конкретная зависимость, может поменяться.  
+> Чтобы форма зависела от абстракции - передать через пропсы url/handler с url  
+> Можно передавать зависимости в конструктор класса.
+
+___
+
+
