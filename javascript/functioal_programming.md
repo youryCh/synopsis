@@ -149,3 +149,83 @@ const resultFunc = func3(3);
 
 ___
 
+## Композиция функций
+
+> **Композиция** - способ построения больших модулей из мелких; упрощает отладку,  
+> тестирование, поддержку кода.
+
+> В композиции входные данные одной функции приходят из выходных данных предыдущей функции.
+
+**Два вида композиции:**
+- compose  
+- pipe
+
+### Compose
+
+> Композиция функций, которая выполняется справа налево.
+
+```
+const compose = (f, g) => (x) => f(g(x));
+
+const user = {
+  name: 'John',
+  age: 38
+};
+const getAge = (user) => user.age;
+const isAgeAllowed = (age) => age >= 18;
+
+const isAllowedUser = compose(
+  isAgeAllowed,
+  getAge
+);
+
+isAllowedUser(user); // true
+
+// реальный пример
+const compose = (...fns) => {
+  return (x) => fns.reduceRight(
+    (acc, fn) => fn(acc),
+    x
+  );
+};
+```
+
+### Pipe
+
+> Как и compose, объединяет функции в цепочку, но выполняется в обратном порядке - слева направо;  
+> pipe визуально понятнее чем compose.
+
+```
+const reverseString = (str) => str
+  .split('')
+  .reverse()
+  .join('');
+
+// реальный пример
+const pipe = (...fns) => {
+  return (x) => fns.reduce(
+    (acc, fn) => fn(acc),
+    x
+  );
+};
+
+pipe(
+  fn1,
+  fn2,
+  fn3
+)(arg);
+```
+
+### Async pipe
+
+> Композиция для функций, которые возвращают Promise.
+
+```
+const asyncPipe = (...fns) => (x) => fns.reduce(
+  async (acc, fn) => fn(await acc),
+  x
+);
+```
+___
+
+
