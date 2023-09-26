@@ -204,3 +204,43 @@ ___
 
 ___
 
+## Cookies
+
+> **Cookies** - небольшой фрагмент данных, отправляется веб-сервером и хранится на ПК.  
+> Браузер пересылает куки серверу каждый раз в составе http запроса в заголовке cookie.
+
+> **Стандартные атрибуты:**
+> - expires  
+> - path  
+> - domain  
+> - secure  
+> - httponly - запрещает js видеть куки
+
+> Cookies используются для управления сессиями пользователя; появились в Netscape в 1994.
+
+___
+
+## CSRF, XSS
+
+> **CSRF** - Cross-Sites-Request-Forgery; подделка межсайтовых запросов;  
+> суть атаки - украсть куки для доступа к авторизационным данным.
+
+```
+// пример CSRF-атаки
+<script>
+  var request = new XMLHttpRequest();
+  var data = 'city=Moscow&street=Lenin';
+
+  request.open('POST', 'https://x.com', true);
+  request.withCredentials = true; // include cookies
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')  // браузер не сделает preflight OPTIONS запроса
+  request.send(data);
+</script>
+```
+
+> Лучшая защита от CSRF - отказаться от кук.
+
+> **XSS** - Cross-Site-Scripting; внедрение вредоносного кода для получения данных авторизации из кук.
+
+___
+

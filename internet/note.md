@@ -1,4 +1,4 @@
-**URL** состоит из protocol/host:port
+**URL** состоит из `protocol/host:port`.
 
 ```
   https://www.site.com
