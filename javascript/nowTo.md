@@ -51,7 +51,7 @@ getArr(3);  // [0, 1, 2]
 
 ___
 
-## Использование замыкания для filter
+## Использовать замыкание для filter
 
 ```
 const inBetween = (a, b) => (num) => num >= a && num <= b;
@@ -60,6 +60,16 @@ const array = [1, 2, 3, 4, 5];
 
 array.filter(inBetween(2, 4));  // [2, 3, 4]
 array.filter(inArray([2, 3]));  // [2, 3]
+```
+
+___
+
+## Использовать optional chaining
+
+```
+items?.[item];
+
+func?.()  // если func !== function, то вызова не будет
 ```
 
 ___

@@ -28,7 +28,11 @@ function binarySearch(arr, x) {
 }
 ```
 
-## Straight insertion (сортировка вставками)
+## Sorting
+
+> Для понимания лучше поставить `debugger` и пройти по шагам в Source.
+
+### Straight insertion (сортировка вставками)
 
 ```
 function straightInsertion(arr) {
@@ -49,3 +53,53 @@ function straightInsertion(arr) {
   return arr;
 }
 ```
+
+### Straight selection (сортировка выбором)
+
+```
+function straightSelection(arr) {
+  let i, j, k, x;
+
+  for (i = 0; i < arr.length - 1; i++) {
+    x = arr[i];
+    k = i;
+
+    for (j = i + 1; j < arr.length; j++) {
+      if (arr[j] < x) {
+        k = j;
+        x = arr[k];
+      }
+    }
+
+    arr[k] = arr[i];
+    arr[i] = x;
+  }
+
+  return arr;
+}
+```
+
+### Bubble sort (сортировка пузырьком)
+
+> Суть в том что наименьшее число всплывает в начало массива.
+
+```
+function bubbleSort(arr) {
+  let i, j, x;
+
+  for (i = 1; i < arr.length; i++) {
+    for (j = arr.length - 1; j > 0; j--) {
+      if (arr[j - 1] > arr[j]) {
+        x = arr[j - 1];
+        arr[j - 1] = arr[j];
+        arr[j] = x;
+      }
+    }
+  }
+
+  return arr;
+}
+```
+
+___
+
