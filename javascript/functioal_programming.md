@@ -228,4 +228,15 @@ const asyncPipe = (...fns) => (x) => fns.reduce(
 ```
 ___
 
+## Пример функции в ФП стиле
+
+```
+// рекурсия вместо цикла
+function sum(arr) {
+  return arr.length && arr[0] + sum(arr.slice(1));
+}
+```
+
+___
+
 

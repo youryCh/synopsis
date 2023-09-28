@@ -37,6 +37,9 @@ ___
 > Пример:  
 > Если в компоненте есть state и useEffect, это можно вынести в кастомный хук.
 
+> SRP также улучшает производительность, т.к. разбивает long task на небольшие задачи,  
+> этим избегаем блокировки main thread браузера.
+
 ### **OCP - Open-Closed Principle**
 
 > Software entities should be open for extension, but closed for modification.
@@ -85,6 +88,20 @@ const SearchInput = (props: Props) => {
 > В форме не должен быть захардкожен url - это конкретная зависимость, может поменяться.  
 > Чтобы форма зависела от абстракции - передать через пропсы url/handler с url  
 > Можно передавать зависимости в конструктор класса.
+
+___
+
+## Lazy loading
+
+`<link rel="preload" />` - средний приоритет; начинает загружаться вместе с родителем.
+
+`<link rel="prefetch" />` - низкий приоритет; загружается после того как завершится загрузка родительского ресурса.
+
+```
+//в React
+const About = lazy(() => import(/* webpackPrefetch: true */ './About'));
+                                // webpackPreload  
+```
 
 ___
 

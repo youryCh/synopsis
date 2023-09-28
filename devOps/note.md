@@ -21,3 +21,10 @@
 
 ___
 
+## Blue-Green Deployment
+
+> Техника бесшовного zero-downtime обновления.
+
+___
+
+
