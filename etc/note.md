@@ -117,3 +117,8 @@ export { Comp1 as default } from './ManyComps';
 
 ___
 
+> **UUID** - Universally Unique IDentifier; стандарт идентификации в ПО.
+
+___
+
+

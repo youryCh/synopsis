@@ -85,4 +85,16 @@ const handle = window.requestIdleCallback(
 
 ___
 
+`crypto` - [doc](https://developer.mozilla.org/ru/docs/Web/API/Crypto) веб-интерфейс; предоставляет базовые криптографические функции.
+
+```
+window.crypto.randomUUID();
+
+window.crypto.getRandomValues(arr);  // сделает массив криптографически случайных чисел
+
+// и много других методов
+```
+
+___
+
 
