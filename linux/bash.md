@@ -10,3 +10,15 @@ ___
 `SHIFT+INSERT` - paste in bash.
 
 ___
+
+`diff` - сравнить файлы.
+  - `-bur` - подробности
+
+```
+// выведет диф в файл
+diff dir1/file2 dir2/file2 > change.diff
+```
+
+___
+
+

@@ -74,4 +74,13 @@ func?.()  // если func !== function, то вызова не будет
 
 ___
 
+## Get query params
+
+```
+const urlParams = new URLsearchParams(window.location.search);
+const id = urlParams.get('id');
+```
+
+___
+
 

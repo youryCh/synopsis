@@ -244,4 +244,34 @@ abc.includes('ab');  // true
 
 ___
 
+## console methods
+
+`console.time(name)` - стартует таймер.
+
+`console.timeEnd(name)` - остановить таймер и вывести значение в мс.
+
+`console.timeLog(name)` - выведет текущее значение без остановки таймера.
+
+```
+console.time('timer');  // start
+
+el.onclick = () => {
+  console.timeLog('timer');
+  ...
+  console.timeEnd('timer');
+};
+```
+
+`console.trace()` - выведет стек вызова.
+
+`console.count(label)` - считает количество вызовов.
+
+`console.countReset()`
+
+`console.group()` - группирует вывод.
+
+`console.table()` - для табличных данных.
+
+___
+
 

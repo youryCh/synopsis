@@ -89,6 +89,7 @@ ___
   - `-m 'message'` - создать commit message без редактора  
   - `-a` - тоже что git add .  
   - `--allow-empty` - разрешить пустой коммит без изменений
+  - `--no-verify` - игнорировать husky pre-commit hook
 
 ```
 // обычное добавление коммита
