@@ -1,6 +1,6 @@
 ## Client side rendering
 
-![CSR](/../assets/img/CSP.png)
+![CSR](../assets/img/CSR.png)
 
 ___
 
