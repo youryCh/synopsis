@@ -105,4 +105,15 @@ const About = lazy(() => import(/* webpackPrefetch: true */ './About'));
 
 ___
 
+## Rest props
+
+```
+function SearchInput(props: ISearchInputProps) {
+  const { value, onChange, isLarge, ...restProps } = props;
+  ...
+}
+```
+
+___
+
 

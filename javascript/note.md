@@ -166,6 +166,8 @@ ___
 > по дефолту index == 0, может принимать отрицательные значения.
 
 ```
+const lastPage = allPages.at(-1);
+
 const arr = [1, 2, 3];
 arr.at(-1);  // 3
              // раньше было arr[arr.length - 1]
@@ -217,6 +219,14 @@ obj.b ||= 30;  // obj.b == 30
 
 obj.a &&= 30;  // obj.a == 30
 obj.b &&= 10;  // obj.b == 0
+```
+
+___
+
+## Array from Set
+
+```
+Array.from(new Set(additionalArr.map((id) => item.id)));
 ```
 
 ___
