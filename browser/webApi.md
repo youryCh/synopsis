@@ -97,4 +97,36 @@ window.crypto.getRandomValues(arr);  // сделает массив крипто
 
 ___
 
+## Audio API usage example
+
+```
+function beep() {
+  const audioContext = new window.AudioContext();
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.4);
+
+  // const context = new window.AudioContext();
+
+  // const osc = new OscillatorNode(context);
+  // const gain = context.createGain();
+
+  // osc.frequency.setValueAtTime(261.6, 0);
+  // gain.gain.value = 0.5;
+
+  // osc.connect(gain).connect(context.destination);
+
+  // osc.start();
+}
+
+useEffect(() => beep(), []);
+```
+
+___
+
 

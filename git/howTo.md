@@ -124,4 +124,20 @@ ___
 
 ___
 
+## Rebase
+
+- `git switch main` - to get back on the main branch
+- `git pull` - to get most up-to-date version of the main branch
+- `git switch feature` - to get back on the feature branch
+- `git rebase main`- to perform rebase; with `-i` - interactive rebase? where you can pick commits, rename, squash and more.
+
+___
+
+## Pre-commit error
+
+- удалить директорию `.git/hooks`
+- `npm rebuild`
+
+___
+
 

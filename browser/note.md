@@ -4,4 +4,10 @@
 
 ___
 
+## Server side rendering
+
+![SSR](../assets/img/SSR.png)
+
+___
+
 
