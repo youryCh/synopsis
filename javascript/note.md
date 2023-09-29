@@ -231,4 +231,17 @@ Array.from(new Set(additionalArr.map((id) => item.id)));
 
 ___
 
+**Async код состоит:**
+- инициализация
+- разрешение
+
+___
+
+## includes() для строки
+```
+abc.includes('ab');  // true
+```
+
+___
+
 

@@ -19,3 +19,14 @@ const z = [10, 20] as const;
 ```
 ___
 
+## Union-type from interface
+
+```
+type T = keyof Date;
+
+type T2 = keyof typeof obj;  // тоже из ключей объекта
+```
+
+___
+
+

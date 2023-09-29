@@ -22,7 +22,8 @@ ___
 > **navigator** - интерфейс доступа для свойств и методов user agent.
 
 ```
-navigator.isOnline;
+navigator.online;  // показывает подключение клиента к интернету
+                   // также есть события window 'onLine', 'offLine'
 
 navigator.vibrate();
 ```
