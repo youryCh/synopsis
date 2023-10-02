@@ -139,4 +139,95 @@ ___
 
 ___
 
+## Curl
+
+`curl` - client URL; утилита для сложных запросов.
+  - `--head/-I` - не получать тело ответа (по сути HEAD)
+  - `-X/--request <method>` - указание метода запроса
+  - `-H/--header <headers>` - указание заголовков
+  - `-v/--verbose` - подробный вывод запроса/ответа
+  - `-d/--data` - для отправки данных в body
+  - `-O` - для скачивания файла
+  - `-k/--insecure` - игнорировать сертификаты
+  - `-F` - загрузка файлов
+  - `-u/--user <user:pass>` - аутентификация
+
+`apt install curl` - установка, если не идёт дефолтом с дистрибутивом.
+
+### GET
+
+```
+// GET запрос; вернёт html
+curl https://ya.ru
+
+// то же, но с указанием порта
+curl ya.ru:443
+
+// перенаправление ответа в файл
+curl https://ya.ru > ya.html
+
+// то же, но если ya.html не существует, то создаст его
+curl https://ya.ru | tee ya.html
+
+// GET to localhost
+curl -H 'Content-Type: application/json' localhost:3000/users
+```
+
+### HEAD
+
+> HEAD запрос возвращает такие же заголовки как в GET запросе (но это по спецификации, на практике не всегда).
+
+```
+// HEAD запрос
+curl --head https://ya.ru
+
+// или
+curl -I https://ya.ru
+```
+
+```
+// для точного получения GET заголовков, в отличии от неточного HEAD
+// --head здесь для игнорирования body
+// -X GET задаёт метод запроса
+curl --head -X GET https://ya.ru
+```
+
+### POST
+
+```
+// POST запрос с телом
+curl -X POST https://ya.ru\               // \+enter - экранирование перевода строки для многострочного ввода
+  -H "Content-Type: application/json"\
+  -d '{"name": "Anna"}'
+
+// 2 варианта отправить данные в теле: 
+// (1) строка key=value
+curl --data "param1=value&param2=value" https://ya.ru
+
+// (2) json
+curl -H 'Content-Type: application/json' --data \
+  {"param1": 123}
+```
+
+### Download
+
+```
+// скачать файл
+// можно скачать несколько файлов одной командой
+curl -O https://ya.ru    // скачает под оригинальным именем
+
+// скачать и сохранить в file
+curl -O file https://ya.ru
+```
+
+`-F` - загрузка файлов.
+
+### Authentication
+
+```
+curl -u <user:pass>
+```
+
+___
+
 
