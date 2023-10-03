@@ -97,7 +97,7 @@ jq . products.json
 
 ___
 
-`dig` - DNS lookup utility; позволяет достать ip.
+`dig` - DNS lookup utility; позволяет достать ip, все доступные dns записи.
 
 **TTL** - time to live (sec).
 
@@ -323,7 +323,7 @@ ___
 
 ## Telnet
 
-`telnet <ip> <port>` - утилита для http-запросов по telnet протоколу.
+`telnet <ip> <port>` - утилита для http-запросов по telnet протоколу (не работает с https).
 
 ```
 telnet 74.125.21.139 80
@@ -331,3 +331,54 @@ telnet 74.125.21.139 80
 // 80 - дефолтный http-порт
 // если используется другой порт, то указать так: http://site.com:123
 ```
+
+> Telnet сначала устанавливает TCP соединение, затем приглашает к взаимодействию по HTTP;  
+> если не вводить запрос, соединение закроется сервером секунд через 30.  
+> Enter - отправить запрос.
+
+```
+    HEAD / HTTP/1.0
+
+method|path|protocol
+
+HEAD / HTTP/1.0       // request line
+User-Agent: chrome    // headers
+```
+
+> Заголовки регистронезависимы, порядок не важен;  
+> перевод строки - новый заголовок;  
+> 2 перевода строки - ввод завершён.
+
+```
+// запрос к localhost
+telnet localhost 8080
+GET / HTTP/1.1
+Host: myHost.local
+```
+
+> Body запроса отделяется пустой строкой.
+
+```
+// отправка формы (не json-формат)
+telnet localhost 3000
+
+POST /session/new HTTP/1.1
+Host myHost.local
+Content-type: application/x-www-form-urlencoded
+Content-Length: 30
+
+username=Yuri&password=secret
+```
+
+```
+// пример PATCH - частичное обновление данных юзера с id = 1
+PATCH /users/1 HTTP/1.1
+Host: site.com
+Content-Length: 21
+Content-Type: application/json
+
+{"name": "Anna"}
+```
+___
+
+
