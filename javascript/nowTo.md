@@ -83,4 +83,10 @@ const id = urlParams.get('id');
 
 ___
 
+## Определить размер объекта
+
+`Object.keys(obj).length;`
+
+___
+
 

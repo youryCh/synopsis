@@ -85,4 +85,31 @@ const today = new Today(new Date);
 
 ___
 
+## Fluent Interface
+
+> Это паттерн проектирования в ООП стиле, направленный на улучшение читаемости кода;  
+> по сути это вызов методов через `.` (как композиция функций в ФП);  
+> может быть реализован как класс с **конечными** (возвращает результат) и **бесконечными** методами (возвращают `this`, что  
+> даёт возможность вызывать через точку сколько угодно раз).
+
+```
+class Enumerable {
+  constructor(collection) {
+    this.collection = collection;
+  }
+
+  where(fn) {
+    this.collection = this.collection.filter(fn);
+
+    return this;   // пример бесконечного метода, за счёт возврата this
+  }
+
+  toArray() {  //  конечный метод
+    return this.collection;
+  }
+}
+```
+
+___
+
 
