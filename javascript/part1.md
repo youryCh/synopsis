@@ -1267,4 +1267,276 @@ const sayHi = function foo(name) {
 ```
 ___
 
+`new Function(arg1, ...argN, functionBody)` - редкий синтаксис объявления функции; функция создаётся из строки,  
+переданной в рантайме. Используется редко, например если тело функции приходит с сервера.
+
+Функция созданная через `new Function` содержит в свойстве `Environment` ссылку на глобальное лексическое окружение  
+(а не то в котором она была создана).
+
+То есть такая функция не является замыканием.
+
+```
+const sum = new Function('a', 'b', 'return a + b');  // аргументы опциональны, можно передать 'a, b'
+
+sum(1, 2);  // 3
+```
+___
+___
+
+## Timers
+
+`setTimeout()`, `setInterval()` - устанавливает задержку, по истечении которой выполняется callback.  
+- первый аргумент - функция или строка с функцией
+- второй аргумент - delay
+- третий и последующие - аргументы которые передаются в callback
+
+Возвращает id таймера для использования в `clearTimeout/clearInterval`.
+___
+
+**Рекурсивный setTimeout** обеспечивает более предсказуемую задержку, чем `setInterval`.
+
+`setInterval` считает задержку вместе со временем выполнения callback, рекурсивный `setTimeout` устанавливает задержку  
+после выполнения callback.
+
+```
+setTimeout(function run() {
+  func();  // основная выполняемая функция
+
+  setTimeout(run, 100);
+}, 100);
+```
+___
+
+Callback из `setTimeout/setInterval` не удаляются сборщиком мусора, т.к. в планировщике движка браузера сохраняется  
+ссылка ни него.
+
+Также, каждый такой callback имеет `Environment`, ссылающийся на внешнее лексическое окружение, в котором есть ссылки  
+на внешние переменные, следовательно сборщик мусора не потрёт их.
+
+Короче, любой вызов таймера может сильно нагрузить память, поэтому `clearTimeout/clearInterval` - обязательно!
+___
+
+`setTimeout(fn)` - (delay = 0 по дефолту) выполнит fn сразу после основного кода; способ прокинуть функцию в macroTask  
+очередь.
+
+**Но** интервал = 0 только первые 5 вызовов, дальше задержка ~4 мс (прописано в стандарте HTML5).  
+Реальная задержка зависит зависит от многого:  
+- загрузка cpu
+- вкладка в фоновом режиме
+- работа ПК от аккумулятора
+- и пр.
+___
+___
+
+## Decorators
+
+**Декоратор** - функция которая принимает другую функцию и изменяет её поведение (например для кеширования,  
+логирования, ...).
+
+```
+function cachingDecorator(fn) {
+  const cache = new Map();
+
+  return function(x) {
+    if (cache.has(x)) return cache.get(x);
+
+    const result = fn(x);
+
+    cache.set(x, result);
+
+    return result;
+  }
+}
+```
+___
+
+**Call forwarding** - перенаправление вызова; передача всех аргументов вместе с контекстом в другую функцию.
+
+`call(context, ...args)` - встроенный метод Function, позволяет вызывать функцию, явно устанавливая `this`.
+
+`apply(this, args)` - то же, но args - псевдомассив, а не список аргументов; лучше оптимизирован, быстрее `call`.
+___
+
+**Заимствование метода:**
+
+```
+function hash() {
+  return [].join.call(arguments);  // берём метод массива для псевдомассива arguments
+}
+```
+
+Технически `join` принимает `this`, который мы передали в `call` и объединяет каждый элемент `arguments`.
+
+`join(glue)` - glue по дефолту `,`
+___
+
+**Полезные декораторы:**
+- spy/log
+- debounce
+- delay
+- throttle
+
+**Spy** - возвращает обёртку, которая хранит все вызовы с аргументами.
+
+```
+function spy(fn) {
+  function wrapper(...args) {
+    wrapper.calls.push(args);
+
+    return fn.apply(this, args);
+  }
+
+  wrapper.calls = [];
+
+  return wrapper;
+}
+```
+
+**Debounce** - не позволяет спамить вызовы во время установленной задержки (например в input - делает вызов когда  
+юзер прекратит ввод + delay).
+
+```
+function debounce(fn, ms) {
+  let isRunning = false;
+
+  return function() {
+    if (!isRunning) {
+      fn.apply(this, arguments);  // apply позволяет использовать декоратор и с методами объектов
+      isRunning = true;           // obj.foo = debounce(obj.foo)
+      setTimeout(() => isRunning = false, ms);
+    }
+  };
+}
+```
+
+**Delay** - задерживает вызов на n мс.
+
+```
+function delay(fn, ms) {
+  return setTimeout(() => fn.apply(this, arguments), ms);  // стрелка не имеет this и argument 
+                                                           // и берёт их из функции-обёртки
+}
+```
+
+**Throttle** - (тормозящий) как debounce, но вызывается последний вызов после задержки.
+
+```
+function throttle(fn, ms) {
+  let isRunning = false;
+  let lastCall;
+
+  return function wrapper() {
+    lastCall = arguments;
+
+    if (!isRunning) {
+      fn.apply(this, arguments);
+      isRunning = true;
+      setTimeout(() => {
+        isRunning = false;
+        lastCall && wrapper.apply(this, lastCall);
+        lastCall = null;
+      }, ms);
+    }
+  };
+}
+```
+___
+
+**Потеря контекста** - если использовать метод объекта отдельно от объекта, то this теряется.
+___
+
+`this` в `setTimeout/setInterval == window`.
+
+В nodeJS this будет объектом таймера.
+___
+
+`bind()` - встроенный метод функций, позволяет зафиксировать контекст; возвращает функцию с привязанным this, но не  
+вызывает её как call/apply.
+
+```
+let user = {
+  name: 'Anna',
+  sayHi(phrase) {
+    alert(`${phrase}, ${this.name}`);
+  }
+};
+
+const say = user.sayHi.bind(user);
+
+say('Hi');  // 'Hi, Anna'
+```
+___
+
+`_.bindAll(obj)` - функция lodash для массовой привязки контекста.
+___
+
+**Частично применённая функция** - функция с фиксированными аргументами.
+
+```
+const mul = (a, b) => a *b;
+const double = mul.bind(null, 2);  // this - обязательный аргумент, поэтому передаём null
+
+double(4);  // 8
+```
+___
+
+**Фиксация части аргументов:**
+
+```
+function partial(fn, ...argsBound) {
+  return function(...args) {
+    return fn.call(this, ...argsBound, ...args);
+  };
+}
+```
+___
+___
+
+## Arrow function
+
+У стрелок нет `this`, если обратиться к this внутри стрелочной функции, то значение берётся из внешнего лексического  
+окружения (как обычная переменная), т.е. берёт контекст там где её используют.
+___
+
+Отсутствие своего this и arguments полезно при использовании функции как **callback**, чтобы не выходить из текущего  контекста. По сути стрелочная функция для этого и создана.
+
+```
+const group = {
+  title: 'Our group',
+  students: ['Anna', 'John'],
+  showList() {
+    this.students.forEach(student => `S{this.title}: ${student}`)  // у стрелки нет this, поэтому значение this берётся
+  }                                                                // из функции showList, где this == group
+};
+```
+___
+
+Так как у стрелок нет this, они не могут использоваться в `constructor`, и не может быть вызвана через `new`.
+___
+
+У стрелок нет псевдомассива `arguments`, что тоже удобно при использовании функции как callback.
+
+```
+function deferDecorator(fn, ms) {
+  return function() {
+    setTimeout(() => fn.apply(this, arguments), ms);  // т.к. у стрелок нет this и arguments, то эти значения берутся из
+  };                                                  // ближайшего лексического окружения
+}
+```
+___
+
+Также у стрелок нет своего `super`, берёт из внешней функции.
+
+```
+class Rabbit extends Animal {
+  stop() {
+    setTimeout(() => super.stop(), 100);
+  }
+}
+```
+___
+___
+
+## Extended object properties
+
 
