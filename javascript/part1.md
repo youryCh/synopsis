@@ -1539,4 +1539,121 @@ ___
 
 ## Extended object properties
 
+**Дескрипторы свойств** - помимо value, свойства объекта имеют 3 скрытых флага:
+- `writable` - можно ли переписать свойство
+- `enumerable` - можно ли перебирать в циклах
+- `configurable` - можно ли удалить свойство и изменять эти флаги
+
+Все эти атрибуты есть у каждого свойства объекта скрыто.
+
+При обычном создании свойства, все эти атрибуты = true.
+___
+
+`Object.getOwnPropertyDescriptor(obj, propName)` - метод возвращает **дескриптор** - объект со всеми скрытыми флагами,  
+для указанного свойства.
+
+`Object.getOwnPropertyDescriptors(obj)` - вернёт объект с объектами-дескрипторами для каждого свойства.
+___
+
+`Object.defineProperty(obj, propName, descriptor)` - метод для создания свойства с объектом-дескриптором; если в  
+дескрипторе описать только value, то все флаги будут false.
+
+Если свойство существует, то `defineProperty` обновит флаги. Все не описанные в дескрипторе флаги станут false.
+
+```
+// определение свойства только для чтения
+const user = {name: 'Anna'};
+
+Object.defineProperty(user, 'name', {
+  writable: false
+});
+
+user.name = 'John';  // error в Strict mode, в нестрогом просто игнорируется
+```
+___
+
+`Object.defineProperties(obj, props)` - то же что `defineProperty`, но создаёт сразу несколько свойств с дескрипторами.
+
+```
+Object.defineProperties(user, {
+  name: {
+    value: 'Anna',
+    writable: true,
+    enumerable: true,
+    configurable: true
+  },
+  age: {
+    value: 40  // все неуказанные флаги будут false
+  }
+});
+```
+___
+
+При установке `configurable: false` мы больше не сможем изменить это поле через defineProperty.
+___
+
+**Копирование объекта** со всеми свойствами (в т.ч. символы) и дескрипторами:
+
+```
+const mathClone = Object.defineProperties(
+  {},
+  Object.getOwnPropertyDescriptors(Math)  // получим Math со всеми свойствами
+);
+
+// не работает
+Object.assign({}, Math);  // {}
+```
+___
+
+`Object.assign(target, source)` - копирует все перечислимые собственный свойства объекта; в source может принимать  
+несколько объектов через запятую.
+
+`object.create(proto, props)` - вернёт новый объект, созданный с указанным прототипом.
+___
+
+**Способы заморозки объекта:**
+- `Object.preventExtensions(obj)` - запретить добавление новых свойств,но можно удалить/изменить имеющиеся.
+- `Object.seal(obj)` - запретить добавлять/удалять свойства, можно только изменять (`configurable: false`).
+- `object.freeze(obj)` - запретить добавлять/удалять/изменять свойства, можно только перебирать в цикле (`writable: false, configurable: false`).
+
+Всё это глобальные способы, дескрипторы работают только для конкретных свойств.
+
+**Способы проверки на заморозку:**
+- `Object.isExtensible(obj)` - вернёт false если добавление свойств запрещено.
+- `object.isSeal(obj)` - вернёт true если для всех свойств установлено `configurable: false`.
+- `Object.isFrozen(obj)` - вернёт true если для всех свойств установлено `configurable: false, writable: false`.
+___
+
+### Getter/setter
+
+У объектов **2 типа свойств:**
+- data properties (обычные свойства)
+- accessor properties
+
+**Accessor** - по сути функции, которые используются для присвоения/получения значения, но в клиентском (внешнем) коде  
+они выглядят как обычные свойства.
+
+```
+const user = {
+  name: 'John',
+  surname: 'Smith',
+  get fullName() {
+    return `${this.name} ${this.surname}`;
+  },
+  set fullName(value) {                            // set принимает 1 аргумент
+    [this.name, this.surname] = value.split(' ');  // деструктирующее присваивание
+  }
+};
+```
+
+**Дескрипторы свойств-аксессоров:**
+- `get`
+- `set`
+- `enumerable`
+- `configurable`
+
+Дескрипторы аксессоров не имеют `value`.
+___
+___
+
 
