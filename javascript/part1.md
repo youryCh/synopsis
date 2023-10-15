@@ -2719,4 +2719,239 @@ foo.some();
 ```
 ___
 
+`import {foo as bar} from '.';` - импорт под другим именем.
+___
+
+`export default` - дефолтный экспорт может быть только 1 в модуле; импортируется без фигурных скобок.
+
+У экспортируемой по дефолту сущности может не быть имени, т.к. такой экспорт всегда 1 на модуль (файл), и имя указывается  
+при импорте (причём любое свободное).
+___
+
+```
+function foo() {}
+
+export {foo as default};  // тоже что export default foo
+```
+___
+
+```
+// дефолтный и именованный импорт вместе
+import {default as User, foo} from './user.js';
+```
+___
+
+**Reexport** - (`export from`) используется для реализации public api, т.е. 1 index файл, который сначала импортирует в себя и сразу экспортирует (единая точка входа).
+
+```
+// index.js
+
+// для именованного экспорта
+export {foo, bar} from './user.js';
+export * from './user.js';
+
+// реэкспорт дефолтного экспорта
+export {default as User} from './user.js';
+export {default} from './user.js';
+```
+___
+
+`import './script.js';` - подключит и запустит модуль без присваивания переменной.
+___
+
+`import(module)` - динамический импорт; вернёт промис, результатом которого станет объект модуля, после того как загрузится.
+
+Даёт возможность динамически загружать модуль в зависимости от условия, по клику и пр.
+
+`import()` можно использовать везде в скрипте, в т.ч. в блоке {}.
+
+```
+import('./module.js')  // import() похож на синтаксис функции, но это не функция
+  .then(module => {})
+  .catch(err => {});
+```
+
+```
+(async () => {
+  let {foo, bar} = await import('./module.js');
+
+  foo();
+})();
+```
+___
+___
+
+## Proxy, Reflect
+
+**Proxy** - объект-обёртка, который оборачивает целевой объект и может перехватывать управление над ним (чтение,  
+запись, и пр.).
+
+`Proxy(target, handler)` - встроенный класс JS для создания и работы с прокси.
+- `target` - оборачиваемый объект (в т.ч. функция)
+- `handler` - объект с ловушками (traps)
+  - `traps` - методы перехватчики операций
+___
+
+Прокси-объект это особый объект не имеющий своих свойств.  
+С пустым `handler` он перенаправляет все операции на target объект.
+___
+
+Для действий над нативным объектом используются внутренние методы ( типа `[[Get]]`, `[[Set]]`, etc), handler прокси  
+как раз перехватывает их.
+___
+
+```
+// переопределение дефолтного поведения
+const nums = [1, 2];
+const numsProxy = new Proxy(nums, {
+  get(target, prop) {
+    return prop in target ? target[prop] : 'нету';
+  }
+});
+
+nums[2];  // undefined
+numsProxy[2];  // 'нету'
+```
+___
+
+**proxy traps:**
+- `get` - чтение свойства
+- `set` - запись свойства
+- `has` - оператор `in`
+- `deleteProperty`
+- `apply` - вызов функции
+- `construct` - `new`
+- `getPrototypeOf` - Object.getPrototypeOf()
+- `setPrototypeOf`
+- `isExtensible` - метод заморозки объекта Object.isExtensible()
+- `preventExtensions` - Object.preventExtensions()
+- etc
+
+Ловушки должны возвращать определённое значение, описанное в спеке.
+___
+
+Прокси обычно **перезаписывает** оригинальный объект.
+
+```
+let nums = [1, 2];
+
+nums = new Proxy(nums, {...});
+```
+___
+
+```
+// пример валидации через ловушку set
+let nums = [1, 2];
+
+nums = new Proxy(nums, {
+  set(target, prop, value) {
+    if (typeof value !== 'number') return false;
+
+    target[prop] = value;
+
+    return true;  // обязательное значение, которое должна реализовать ловушка set
+  }
+});
+```
+___
+
+```
+// пример с ловушкой ownKeys
+let user = {
+  name: 'Anna',
+  age: 44,
+  _pass: '0000'
+};
+
+user = new Proxy(user, {
+  ownKeys(target) {
+    return Object.keys(target).filter(key => !key.startsWith('_'));
+  }
+});
+
+Object.keys(user);  // ['name', 'age'] исключит свойство на '_' только из перебора, чтобы полностью защитить '_' свойства
+                    // нужны также ловушки: get, set, deleteProperty, has
+```
+___
+
+С помощью прокси можно сделать **observable**, т.е. наблюдаемый объект.
+___
+
+```
+// пример с has (sexy)
+let range = {
+  from: 1,
+  to: 10
+};
+
+range = new Proxy(range, {
+  has(target, prop) {
+    return prop >= target.from && prop <= target.to;
+  }
+});
+
+5 in range;  // true
+11 in range;  // false
+```
+___
+
+**Прокси-декоратор** перенаправляет запросы к  свойствам `length` и `name` к оригинальной функции. Обычный декоратор  
+направляет такие запросы у обёртке, у которой `length == 0`, `name == ''`.
+
+```
+// пример ловушки для функции
+function delay(fn, ms) {
+  return new Proxy(fn, {
+    apply(target, thisArg, args) {
+      setTimeout(() => target.apply(thisArg, args), ms);
+    }
+  });
+}
+```
+___
+
+Проксирование снижает производительность.
+___
+
+`Proxy.revocable` - отключаемый прокси; может быть отключен вызовом функции `revoke()`; позволяет отключить  
+доступ к объекту.
+
+```
+let { proxy, revoke } = Proxy.revocable(target, handler);
+
+revoke();  // proxy теперь недоступен
+```
+___
+
+Если прокси использовать для **встроенных объектов** или приватных полей (`#`), то ловушки не сработают, нужно  
+привязать контекст.
+___
+
+`Reflect` - встроенный объект, упрощает создание прокси (дополнительное api к Proxy).
+
+**Методы Reflect** имеют те же названия что ловушки прокси.
+
+```
+let user = {};
+
+Reflect.set(user, 'name', 'Anna');
+
+user.name;  // 'Anna'
+```
+
+По сути методы **Reflect перенаправляют (отражают)** вызов внутри ловушки прокси обратно на объект.
+
+```
+let user = {name: 'Anna'};
+
+user = new Proxy(user, {
+  get(target, prop, receiver) {  // receiver - ссылка на this
+    console.log(`Get ${prop}`);  // side effect
+
+    return Reflect.get(target, prop, receiver);  // перенаправляет действие обратно на объект
+  }
+});
+```
+___
+
 
