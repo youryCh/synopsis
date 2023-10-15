@@ -2537,4 +2537,119 @@ ___
 
 ## Generator
 
+**Генератор** - функция которая возвращает множество значений по очереди; вызов функции возвращает объект-генератор  
+с методом `next()`.
+
+```
+function* generator() {  // либо function *generator() {}
+  yield 1;
+  yield 2;
+
+  return 3;  // если нет return, то next() будет работать циклически
+}
+
+const newGenerator = generator();
+
+newGenerator.next();  // {value: 1, done: false}  
+newGenerator.next();  // {value: 2, done: false}
+newGenerator.next();  // {value: 3, done: true}
+```
+
+`yield` - выполняет код до ближайшей инструкции yield, где выполнение приостанавливается и возвращается значение;  
+возвращает объект вида `{value: 123, done: false}`; `done` указывает есть ли ещё yield, если это последний, то `done: true`.
+
+Генератор - итерируемый объект (`for of`); для перебора в цикле, последняя инструкция должна быть `yield`.  
+Так же можно `[...generator()]`.
+___
+
+Генератор добавлен в JS для итерируемых объектов.
+
+Пример использования генератора для итерируемого объекта:
+
+```
+const range = {
+  from: 1,
+  to: 5,
+  *[Symbol.iterator]() {
+    for (let v = this.from; v <= this.to; v++) {
+      yield v;
+    }
+  }
+};
+
+console.log([...range]);  // 1,2,3,4,5
+```
+___
+
+**Композиция генераторов** - возможность встраивать генераторы друг в друга с помощью `yield*`; по сути вывод одного  
+генератора передаётся на вход следующего.
+
+```
+function* genSequence(start, end) {
+  for (let i = start; i <= end; i++) yield i;
+}
+
+function* genPassword() {
+  yield* genSequence(47, 76);
+  yield* genSequence(78, 96);
+  yield* genSequence(99, 142);
+}
+```
+___
+
+`yield(arg)` - передаёт в генератор `arg`, который становится результатом текущего yield.
+
+`generator.throw(new Error)` - выбросит исключение в первом yield.
+___
+
+**Асинхронные генераторы** - позволяют перебирать данные, поступающие асинхронно.
+
+**Асинхронный объект-итератор** создаётся почти как обычный объект-итератор, но:  
+1. вместо `Symbol.iterator` - `Symbol.asyncIterator`
+2. `next()` должен возвращать промис
+
+Для перебора используется `for await of`:
+
+```
+const range = {
+  from: 1,
+  to: 5,
+  [Symbol.asyncIterator]() {  // вернёт объект-итератор
+    return {
+      current: this.from,
+      last: this.to,
+      async next() {  // автоматически оборачивается в промис, благодаря async
+        await this.current <= this.last ?
+          {
+            value: this.current++,
+            done: false
+          }
+          :
+          {done: true}
+      }
+    };
+  }
+};
+
+(async () => {
+  for await (let v of range) alert(v);
+})();
+```
+
+```
+// то же, но через async generator
+...
+async *[Symbol.asyncIterator]() {
+  for (let v = this.from; v <= this.to; v++) {
+    await new Promise((res) => setTimeout(res, 100));
+    yield v;
+  }
+}
+...
+```
+___
+___
+
+## Modules
+
 
