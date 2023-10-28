@@ -98,7 +98,7 @@ ___
 
 `getElementById`
 
-`querySelectorAll` - работает с любым css селектором и псевдоклассом.
+`querySelectorAll` - работает с любым css селектором и псевдоклассом; возвращает статичную коллекцию.
 
 `querySelector` - находит первый подходящий элемент.
 
@@ -142,5 +142,162 @@ const chapter = document.querySelector('.chapter');
 chapter.closest('.book');  // ul
 ```
 ___
+
+Устаревшие методы поиска элементов:
+- `getElementsByTagName()`
+- `getElementsByClassName()` - возвращают коллекцию нод
+- `getElementsByName()` - ищет по атрибуту `name`
+
+Все эти методы возвращают **живую коллекцию** - изменяется если обновляется DOM.
+___
+
+`contains` - проверяет содержится ли в элементе искомый элемент.
+
+```
+elemA.contains(elemB);  // true/false
+```
+___
+
+`console.log(document)` - в виде DOM дерева.
+
+`console.dir(document)` - в виде объекта.
+___
+
+**IDL** - interface description language; язык спецификаций для описания интерфейсов; используется для описания классов DOM.
+___
+
+`elem.nodeType` - node type.
+
+```
+elem instanceof HTMLBodyElement  // same
+```
+___
+
+`elem.tagName`  
+`elem.nodeName` - returns tag name in upper case.
+___
+
+**Иерархия классов DOM нод:**
+- EventTarget
+- node:
+  - Text
+  - Comment
+  - Element: 
+    - SVGElement
+    - HTMLElement:
+      - HTMLBodyElement
+      - HTMLInputElement
+___
+
+`element.innerHTML` - получить содержимое элемента в виде строки; можно присвоить новое содержимое.
+
+Можно добавить тег script, появится в DOM, но не запустится.
+___
+
+`element.outerHTML` - весь html элемента.
+___
+
+`.nodeValue`  
+`.data` - получить содержимое текстовых нод и нод-комментариев.
+
+Содержимое комментариев используется в шаблонизаторах.
+
+```
+<!-- if isAdmin -->
+...
+<!-- /if -->
+```
+___
+
+`textContent` - получить текст элемента без тегов; также можно присваивать.
+
+При присваивании через `textContent`, теги внутри текста останутся строкой (полезно для ввода юзера). При присваивании через  
+`innerHTML`, теги применятся.
+___
+
+ `element.hidden` - скрывает элемент (как `display: none`), но оставляет в DOM.
+
+ ```
+ // blinking
+ setInterval(() => el.hidden = !el.hidden, 500);
+ ```
+ ___
+
+ **Узнать свойства DOM элементов:**
+ - html.spec.whatwg.org
+ - `console.dir(element)`
+ - DevTools -> Elements -> Properties
+___
+
+Ко всем атрибутам можно получить доступ, т.к. ноды это js-объекты.  
+Имена html-атрибутов регистронезависимы (`'id' === 'ID'`).  
+Значение атрибута всегда приводится к string.
+
+**Методы доступа к атрибутам**:
+- `el.attributes` - список всех атрибутов
+- `el.hasAttribute(name)`
+- `el.getAttribute()`
+- `el.setAttribute(name, value)`
+- `el.removeAttribute()`
+___
+
+`document.createElement(tag)` - создать новый элемент.
+
+`document.createTextNode(text)` - то же для текстовой ноды.
+___
+
+**Методы вставки элементов:**
+- `node.append(node|string)` - вставить элемент к конец ноды; принимает несколько элементов через зпт.
+- `prepend()` - в начало ноды
+- `before()` - до ноды
+- `after()` - после ноды
+- `replaceWith()` - заменит ноду переданной нодой/строкой.
+
+```
+div.before('text', document.createElement('span'));
+// '<p>Hi</p>' - вставится как строка
+```
+___
+
+`.insertAdjacentHTML(where, html)` - вставит html.
+- `where`
+  - `beforebegin`
+  - `afterbegin`
+  - `beforeend`
+  - `afterend`
+
+`insertAdjacentText()`  
+`insertAdjacentElement()` - та ж хуйня.
+___
+
+`node.remove()` - удалить ноду.
+___
+
+`el.cloneNode(depth)` - клонирование элемента.
+- `depth`
+  - 'true' - глубокое клонирование
+  - 'false' - поверхностное
+___
+
+`DocumentFragment` - пустая обёртка (как React.Fragment).
+
+```
+const fragment = new DocumentFragment();
+```
+___
+
+**Устаревшие методы вставки:**
+- `el.appendChild(node)`
+- `el.insertBefore(node, nextSibling)` - вставляет ноду перед nextSibling
+- `el.replaceChild(node, oldChild)`
+- `el.removeChild(node)`
+___
+
+`document.write()` - загружает html-строку напрямую в document, минуя DOM; работает только во время загрузки html; работает  
+очень быстро.
+___
+___
+
+## Стили, классы
 
 
