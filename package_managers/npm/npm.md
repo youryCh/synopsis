@@ -1,5 +1,7 @@
 ## npm ci
 
+ci - clean install.
+
 > Устанавливает зависимости из package-lock.json, а не из package.json.   
 > Не обновляет package.json и package-lock.json.  
 > Если lock-file нет, то вернёт ошибку.  
