@@ -53,4 +53,44 @@ b;  // 'ccc'
 ```
 ___
 
+## Найти min/max число в массиве
 
+```
+Math.min.apply(null, arr);
+
+Math.max.apply(null, arr);
+```
+___
+
+## Factorial
+
+**Факториал числа** - произведение натуральных чисел от 1 до самого числа (включая данное число); факториал 0 и 1  
+равен 1.
+
+```
+// через рекурсию
+function factorial(n) {
+  if (n !== 1) {
+    return n * factorial(n - 1);
+  } else {
+    return 1;
+  }
+}
+
+// через цикл
+function factorial2(n) {
+  let arr = [];
+  let result = 1;
+
+  for (let i = 0; i < n; i++) {
+    arr[i] = i + 1;
+  }
+
+  for (let i = 0; i < arr.length; i++) {
+    result *= arr[i];
+  }
+
+  return result;
+}
+
+```

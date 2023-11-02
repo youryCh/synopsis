@@ -26,6 +26,8 @@
 
 `SHIFT+ESC` - chrome task manager.
 
+`CTRL+U` - view source html.
+
 ## DevTools
 
 `CTRL+SHIFT+P` - devtools command line.

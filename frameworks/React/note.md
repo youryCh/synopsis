@@ -1,27 +1,23 @@
-### Event typing
+## Event typing
 
 `onChange(event: React.ChangeEvent<HTMLInputElement>){}`  
 
 `React.FormEvent` и ещё куча других, смотри доку.
-
 ___
 
 ## eslintrc.js
 
 > После создания react проекта через cra/npm run eject, создать конфиг-файл линтера вручную:  
 > `npm init @eslint/config`
-
 ___
 
 **VFC** - Void Function Component; type for react component without children.
 
 **FC** - Function Component; type fjr react component with children.
-
 ___
 
 > **Hydration** - гидратация; это когда React связывает отрисованные DOM-элементы с js-кодом,  
 > т.е. делает UI интерактивным.
-
 ___
 
 ## SOLID in React
@@ -88,7 +84,6 @@ const SearchInput = (props: Props) => {
 > В форме не должен быть захардкожен url - это конкретная зависимость, может поменяться.  
 > Чтобы форма зависела от абстракции - передать через пропсы url/handler с url  
 > Можно передавать зависимости в конструктор класса.
-
 ___
 
 ## Lazy loading
@@ -102,7 +97,6 @@ ___
 const About = lazy(() => import(/* webpackPrefetch: true */ './About'));
                                 // webpackPreload  
 ```
-
 ___
 
 ## Rest props
@@ -113,7 +107,9 @@ function SearchInput(props: ISearchInputProps) {
   ...
 }
 ```
+___
 
+`import React from 'react';` - нужен в каждом jsx/tsx файле, до 17 реакта.
 ___
 
 

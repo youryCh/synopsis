@@ -11,7 +11,6 @@ export const useRate = () => {
   return { rate, handleRating };
 };
 ```
-
 ___
 
 ## Custom hook example
@@ -37,7 +36,6 @@ export const useProducts = () => {
   return { products };
 };
 ```
-
 ___
 
 ## isOnline react hook
@@ -62,7 +60,6 @@ export const useDetectOnLine = () => {
 
   return online;
 };
-
 ___
 
 

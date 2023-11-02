@@ -9,4 +9,9 @@ lazy(() => import(/* webpackChunkName: About */ './About'))
 
 ___
 
+## Использовать sass
+
+`npm i node-sass` - установить; по дефолту cra использует css, less.
+___
+
 
