@@ -26,10 +26,10 @@ ___
 
 ### ReactDOM
 
-`ReactDOM.render(what, where)` - библиотека для общения react с DOM браузера; вызывается 1 раз для рендера точки  
-входа приложения.
+`ReactDOM` - библиотека для общения React с DOM браузера; синхронизирует VirtualDOM и DOM;  
+содержит метод render() - вызывается 1 раз для рендера точки входа приложения.
 
-`ReactDOM.render(element, document.getElementById('root'))`
+`ReactDOM.render(what, where)`
 
 ```
 // создание элемента через jsx синтаксис
@@ -184,6 +184,11 @@ class App extends React.Component {
 4. child render
 5. child componentDidMount
 6. componentDidMount
+
+`getDerivedStateFromProps(props, state)` - для установки initial state из props; вызывается всегда перед render().
+
+`getSnapshotBeforeUpdate()` - позволяет брать информацию DOM перед возможным изменением; вызывается перед  
+фиксированием.
 ___
 ___
 
@@ -367,5 +372,217 @@ useEffect(() => {
 ___
 
 ### useState
+
+`useState(initial)` - возвращает массив, содержащий объект состояния и функцию для его изменения.
+
+```
+const [state, setState] = useState({});
+```
+
+`state` - объект описывающий состояние компонента; при изменении state React перерендерит область где state  
+выводится.
+
+`setState()` - асинхронная функция; может принимать значение или callback, возвращающий изменённое состояние;  
+React оптимизирует обновление стейта, поэтому не гарантирует точность, для связанного состояние лучше useReducer.
+
+```
+// изменить состояние, основываясь на предыдущем значении
+setState((prevState) => prevState + 1);
+```
+
+`initial` - начальное состояние; может быть вычисляемым значением.
+
+```
+// при такой передачи computeInitial не будет вычисляться при каждом изменении стейта
+const [count, setCount] = useState(() => computedInitial());
+```
+___
+
+### State в классовых компонентах
+
+`this.state` - объект хранит все переменные состояния.
+
+`this.setState()` - async функция обновления состояния; может принимать вторым аргументом callback, который выполнится  
+когда state изменится.
+
+```
+class Example extends React.Component {
+  state = {count: 0}  // так можно установить дефолтное значение
+
+  constructor(props) {
+    super(props);
+    this.state = {count: 0};
+  }
+
+ updateCount = () => {
+  const {count} = this.state;
+
+  this.setState({count: count + 1});
+ }
+
+ // другой вариант обновления state
+ updateCount = () => {
+  this.setState((curState) => {count: curState.count + 1});  // так берётся актуальное значение
+ }
+
+ render() {
+  return (
+    <>
+      <p>{this.state.count}</p>
+      <button onClick={this.updateCount}>Add</button>
+    </>
+  );
+ }
+}
+```
+
+Если в state несколько свойств, для обновления одного не нужно передавать весь объект как в хуках.
+
+Пример асинхронности setState:
+
+```
+updateCount = () => {
+  this.setState({count: 1});
+
+  console.log(this.state);  // {count: 0}
+}
+```
+
+Чтобы код выполнился после обновления state, его нужно передать в setState вторым аргументом в коллбеке:
+
+```
+updateCount = () => {
+  this.setState(
+    {
+      count: 2,
+      name: 'Anna'
+    },
+    () => console.log(this.state)
+  );
+}
+```
+
+Если state обновлять не через сеттеры, то не будет реактивного обновления ui.
+___
+
+## Контролируемые формы
+
+```
+const Input = () => {
+  const [value, setValue] = useState('');
+  
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <>
+      <input value={value} onChange={handleChange} />
+      <span>{value}</span>
+    </>
+  );
+};
+```
+
+То же в классовых компонентах:
+
+```
+class Input extends React.Component {
+  state = {value: ''};
+
+  // важно использовать стрелки, чтобы this = Input
+  // у function this = undefined здесь, т.к. в компоненте strict mode, и пришлось бы привязывать контекст через bind
+  handleChange = (event) => {
+    this.setState({value: event.target.value});
+  };
+
+  render() {
+    return (
+      <>
+        <input value={this.state.value} onChange={this.handleChange} />
+        <span>{this.state.value}</span>
+      </>
+    );
+  }
+}
+```
+
+`SyntheticBaseEvent` - специальная обёртка React над нативным event браузера; используется внутри компонентов  
+по дефолту вместо event.
+___
+
+## Props
+
+Компоненты должны передавать пропсы только сверху вниз (Flux).
+
+
+```
+const App = () => {
+  const handler = useCallback(() => console.log('click!'));
+
+  return <Button handler={handler} />;
+};
+
+const Button = (props) => (
+  <button onClick={props.handler}>Click</button>
+);
+```
+
+**Поднятие state** - если 2 компонента должны иметь доступ к одной и той же переменной state, то её помещают  
+в ближайшего общего родителя (но лучше в Context).
+___
+
+## Отображение списков
+
+Для рендера списков используется `map`.
+
+```
+const List = () => {
+  const [list, setList] = useState([
+    'message 1',
+    'message 2',
+    'message 3'
+  ]);
+
+  return (
+    <>
+      <p>List</p>
+      {list.map((message, idx) => <div key={`${message}${idx}`}>{message}</div>)}
+    </>
+  );
+};
+```
+
+### key
+
+`key` - специальный проп (должен быть уникальным), который React используется для определения изменившегося  
+элемента; используется при рендере списков; влияет на производительность приложения.
+
+Если при обновлении key не изменился, то компонент не будет перемонтирован. key должен быть уникальным, можно  
+использовать индекс элемента в массиве, но только если не меняется порядок, иначе использовать id.
+
+Даже при удалении элемента массива с key, React не перерендерит весь список. Но при изменении key у элемента,  
+этот элемент перемонтируется.
+___
+
+## Fragment
+
+`React.Fragment` - специальный компонент для группировки нескольких элементов; не добавляется в DOM; может принимать  
+единственный проп - key (не в краткой форме).
+
+```
+<React.Fragment key={id}>
+  <Comp1 />
+  <Comp2 />
+</React.Fragment>
+
+// или
+<>
+  <Comp1 />
+  <Comp2 />
+</>
+```
+
+## Virtual DOM
 
 
