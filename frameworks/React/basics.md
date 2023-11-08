@@ -878,4 +878,88 @@ ___
 **HOC** - (higher order component) компонент высшего порядка - функция которая принимает React компонент и возвращает  
 новый компонент с каким-то сайд эффектом; по сути декоратор.
 
+```
+function Example(props) {
+  return <span>{props.message}</span>
+}
 
+const withLogger = function(Component) {
+  return (props) => {
+    console.log(props);
+
+    return <Component {...props} />;
+  };
+}
+
+export ExampleWithLogger = withLogger(Example);
+```
+
+`connect` из Redux по сути HOC.
+___
+___
+
+## React.Context
+
+**props drilling** - сквозная передача пропсов через промежуточные компоненты, которые не используют эти пропсы.
+
+Props drilling нарушает важный принцип React - компонент должен получать только те данные, которые ему нужны.
+
+**Context** - по сути переменная на высшем уровне приложения, доступ к которой можно получить из любого компонента.
+
+Контекст удобен для передачи/обновления общих данных компонентам на разном уровне вложенности (theme, language).  
+Количество контекстов не ограничено; корневой компонент оборачивается во множество провайдеров контекста.  
+Если компонент не обёрнут в Provider, то контекст будет иметь дефолтное значение в этом компоненте.
+
+`createContext(initial)` - создаёт контекст; создаётся на верхнем уровне приложения (index.ts).
+
+```
+const ThemeContext = React.createContext({
+  theme: 'dark'
+});
+```
+
+`Context.Provider` - компонент-обёртка над корневым компонентом (или самым верхним из тех, которые используют  
+контекст); принимает атрибут `value` - значение, которое будет передано в компонент.
+
+```
+function App() {
+  return (
+    <ThemeContext.Provider value={{theme: 'dark'}}>
+      <Router />
+    </ThemeContext.Provider>
+  );
+}
+
+// использование в компоненте
+const contextValue = useContext(ThemeContext);
+```
+
+`Consumer` - компонент Context, внутри содержит функцию, как children.
+
+```
+<ThemeContext.Consumer>
+  {(value) => <div>{value}</div>}
+</ThemeContext.Consumer>
+```
+
+**Context в классовом компоненте:**
+
+```
+// index.js
+const MyContext = React.createContext({
+  isLoggedIn: false
+});
+
+MyComp.contextType = MyContext;
+
+ReactDOM.render(...);
+
+// MyComp.jsx
+class MyComp extends React.Component {
+  render() {
+    console.log(this.context);
+
+    return ...;
+  }
+}
+```
