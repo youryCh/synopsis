@@ -898,13 +898,37 @@ export ExampleWithLogger = withLogger(Example);
 ___
 ___
 
-## React.Context
+## Context API
 
 **props drilling** - сквозная передача пропсов через промежуточные компоненты, которые не используют эти пропсы.
 
 Props drilling нарушает важный принцип React - компонент должен получать только те данные, которые ему нужны.
 
 **Context** - по сути переменная на высшем уровне приложения, доступ к которой можно получить из любого компонента.
+
+**Как использовать:**
+1. создать контекст через `createContext`
+2. использовать поставщик контекста - обернуть дерево компонентов в context provider
+3. передать необходимое значение в value атрибут провайдера
+4. получить значение в любом компоненте дерева через `useContext`
+
+```
+export const UserContext = React.createContext();
+
+export default function App() {
+  return (
+    <UserContext.Provider value="Reed">
+      <User />
+    </UserContext.Provider>
+  );
+}
+
+function User() {
+  const value = React.useContext(UserContext);
+
+  return <h1>{value}</h1>;
+}
+```
 
 Контекст удобен для передачи/обновления общих данных компонентам на разном уровне вложенности (theme, language).  
 Количество контекстов не ограничено; корневой компонент оборачивается во множество провайдеров контекста.  
@@ -934,7 +958,7 @@ function App() {
 const contextValue = useContext(ThemeContext);
 ```
 
-`Consumer` - компонент Context, внутри содержит функцию, как children.
+`Consumer` - компонент Context, внутри содержит render функцию, как children; устаревшее, лучше использовать useContext.
 
 ```
 <ThemeContext.Consumer>
@@ -963,3 +987,12 @@ class MyComp extends React.Component {
   }
 }
 ```
+
+**Проблема производительности** - если провайдеру передать объект и обновлять в нём свойства, то это приведёт к  
+ререндеру всех компонентов, использующих контекст.  
+По этому не стоит использовать Context как полноценный state manager (привет РКК), он не подходит для часто  
+обновляемых данных, подходит скорее как эквивалент глобальных переменных.
+___
+___
+
+
