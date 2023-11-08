@@ -112,4 +112,25 @@ ___
 `import React from 'react';` - нужен в каждом jsx/tsx файле, до 17 реакта.
 ___
 
+## htmlFor
+
+В jsx вместо `for` в `label` (зарезервировано) надо использовать `htmlFor`.
+
+```
+<label htmlFor="id"></label>
+```
+___
+
+`dangerouslySetInnerHTML()` - аналог innerHTML в React; принимает объект со свойством `__html`; небезопасный (наверно  
+плохо влияет на обновление VDOM).
+
+```
+<div
+  dangerouslySetInnerHTML={{
+    __html: 'some content'
+  }}
+></div>
+```
+___
+
 

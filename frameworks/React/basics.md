@@ -26,7 +26,7 @@ ___
 
 ### ReactDOM
 
-`ReactDOM` - библиотека для общения React с DOM браузера; синхронизирует VirtualDOM и DOM;  
+`ReactDOM` - библиотека для общения React с DOM браузера; синхронизирует VirtualDOM и DOM (reconciliation);  
 содержит метод render() - вызывается 1 раз для рендера точки входа приложения.
 
 `ReactDOM.render(what, where)`
@@ -465,6 +465,80 @@ updateCount = () => {
 Если state обновлять не через сеттеры, то не будет реактивного обновления ui.
 ___
 
+### useReducer
+
+`useReducer(reducer, initial)` - альтернативный useState хук для более сложного связанного между собой state; синтаксис в стиле redux.
+
+```
+const initialState = {count: 0};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      return {...state};
+  }
+};
+
+const Counter = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <>
+      <span>Count: {state.count}</span>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+};
+```
+
+Реализация переключателя:
+
+```
+const [value, toggleValue] = useReducer((prev) => !prev, true);
+
+<button onClick={toggleValue}>Toggle</button>
+```
+
+Передача пропсов в reducer с помощью замыкания:
+
+```
+const reducer = (amount) => (state, action) => {
+  switch (action) {
+    case 'increment':
+      return state + amount;
+    case 'decrement':
+      state - amount;
+  }
+};
+
+const useCounterState = () => {
+  const { data } = useQuery(['amount'], fetchAmount);
+
+  return React.useReducer(reducer(data ?? 1), 0);
+};
+
+const App = () => {
+  const [count, dispatch] = useCounterState();
+
+  return (
+    <>
+      Count: {count}
+      <button onClick={() => dispatch('increment')}>+</button>
+      <button onClick={() => dispatch('decrement')}>-</button>
+  );
+};
+```
+___
+
+### useContext
+
+`useContext()` - хук для доступа к React.Context.
+___
+___
+
 ## Контролируемые формы
 
 ```
@@ -584,5 +658,224 @@ ___
 ```
 
 ## Virtual DOM
+
+**VirtualDOM** - оптимизированная копия DOM браузера; React создаёт при монтировании приложения; нужен для  
+оптимизации рендера браузера.
+
+Как работает:
+
+```
+      обновление компонента (new state/props)
+                        v
+             React строит новый VDOM
+                        v
+React сравнивает старый и новый DOM (reconciliation)
+                        v
+        ререндер обновлённых элементов DOM
+```
+
+### Reconciliation
+
+**Реконциляция** - эвристический алгоритм React для сравнения двух деревьев; сложность O(n).
+
+Сложность обычного алгоритма сравнения деревьев - O(n**3), т.е. для 100 элементов потребуется до 1 млн. операций.
+
+Особенности реконциляции React:
+- если меняется корневой элемент, то всё поддерево пересоздаётся
+- элемент не пересоздаётся, если не изменился его key
+- сложность O(n), т.е. для 100 элементов до 100 операций, что быстро
+___
+
+## props.children
+
+`children` - специальный проп, который React создаёт, если в компонент вложен элемент.
+
+Удобно для создания переиспользуемого компонента с разным контентом внутри. Также в children можно передать функцию.
+
+```
+function Card(props) {
+  return (
+    <div className={props.style}>
+      {props.children}
+    </din>
+  );
+}
+```
+
+**render props** - паттерн дял контроля рендера дочернего компонента; родительский компонент передаёт дочернему  
+функцию `render` (общепринятое имя), дочерний компонент вызывает `props.render` с нужным аргументом.
+___
+___
+
+## React router
+
+Библиотека для настройки маршрутизации внутри SPA.
+
+[Doc](https://v5.reactrouter.com/web/guides/quick-start)
+
+`npm i react-router-dom` - установка
+
+`npm i @types/react-router-dom` - типизация
+
+**4 вида роутеров:**
+1. Browser router - использует Ordinary URL (через `/`)
+2. Hash router - использует Hashed URL (через `#`); обычно используется для навигации по якорям внутри страницы; не  
+   требует доп настройки сервера
+3. Memory router - не использует адресную строку, хранит маршрут в памяти; используется для тестирования
+4. Static router - не изменяет url; используется для SSR и в тестировании
+
+### Компоненты роутера
+
+`BrowserRouter` - обёртка для использования роутера, устанавливает тип роутера.
+
+В `<BrowserRouter>` оборачиваем `<App />` в index.js
+___
+
+`Switch` - обёртка для всех роутов приложения; работает как switch-case - по порядку перебирает path переданных  
+роутов до первого совпадения.
+___
+
+`Route` - обёртка для компонентов, которые нужно отобразить по заданному адресу; принимает:  
+- `path` - url
+- `exact` - требует точного совпадение url
+- `component` - принимает компонент
+- `render` - принимает функцию рендера компонента; содержит параметры:
+  - `history`
+  - `location`
+  - `match`
+
+Компонент внутри Route отобразится при совпадении текущего url с path (частичное без exact). Все роуты обычно  
+выносят в отдельный компонент Router.
+
+```
+<Route path="/profile">
+  <Profile />  // 'profile123' тоже сработает
+</Route>
+
+<Route exact path="/home">
+  <HomePage />
+</Route>
+```
+
+Другие способы передачи компонента в Route:
+
+```
+<Route path="/" component={Comp} />
+
+<Route
+  path="/"
+  render={(params) => {
+    console.log(params);
+
+    return <Home />;
+  }}
+/>
+
+// пример необязательного параметра
+<Route path="/chats/:chatId?" />
+```
+
+**Страница 404** - добавить в конце списка роутов, без указания path.
+___
+
+`Link` - обёртка над `<a>` для создания ссылки; принимает:  
+- `to` - проп для адреса, относительно базового url.
+
+```
+<Link to="/">Home</Link>
+```
+___
+
+`Redirect` - для редиректа на другую страницу; принимает:
+- `to` - путь для ридеректа
+
+```
+if (!chat) {
+  return <Redirect to="/chats" />
+}
+```
+___
+
+### Хуки роутера
+
+`useParams()` - для доступа к квери-параметрам url, обеспечивает обновление компонента при из изменении.
+
+```
+// http://localhost:3000/chats/12
+
+function Chats() {
+  const { chatId } = useParams();  // '12'
+  ...
+}
+
+// в классовых компонентах
+this.params.match.params.chatId
+```
+___
+
+`useRouteMatch()` - вернёт объект (match) со свойствами текущего роута (path, url); удобен при создании вложенных  
+маршрутов.
+
+```
+function Chats() {
+  const [chats, setChats] = useState(initialChats);
+  const { path, url } = useRouteMatch();
+
+  return (
+    <Switch>
+      <Route exact path={path}>
+        <Comp1 />
+      </Route>
+      <Route path={`${path}/:chatId`}>
+        <Comp2 />
+      </Route>
+    </Switch>
+  );
+}
+```
+___
+
+`useHistory()` - вернёт объект history; используется для навигации.
+
+history содержит методы:
+- `go()` - перемещает по истории
+- `goBack()` - то же что go(-1)
+- `goForward()` - то же что go(1)
+- `push(url)` - pushes url onto the history stack
+- `block` - prevent navigation
+- `replace()` - replace url on the history stack
+- `location` - current location; лучше использовать location из пропа render компонента Route; may have:  
+  - `pathname`
+  - `search`
+  - `hash`
+  - `state`
+- `length` - length of history stack
+- `action` - current action (push, replace, etc)
+
+```
+const HomeButton = () => {
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push('/home')
+  };
+
+  return (
+    <button onClick={handleClick}>
+      Home
+    </button>
+  );
+};
+```
+___
+
+`useLocation()` - returns the location object that represent the current url.
+___
+___
+
+## HOC
+
+**HOC** - (higher order component) компонент высшего порядка - функция которая принимает React компонент и возвращает  
+новый компонент с каким-то сайд эффектом; по сути декоратор.
 
 
