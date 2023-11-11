@@ -1,8 +1,8 @@
-> **Redux-saga** - это менеджер сайд-эффектов (middlewares).
+**Redux-saga** - это менеджер сайд-эффектов (middlewares).
 
-> **Сайд-эффект** - (middleware) это действие которое выполняется на диспатч экшена.
+**Сайд-эффект** - (middleware) это действие которое выполняется на диспатч экшена.
 
-> **Saga** - паттерн управления процессами, которые выполняются транзакционно, т.е. как одно атомарное действие.
+**Saga** - паттерн управления процессами, которые выполняются транзакционно, т.е. как одно атомарное действие.
 
 `yarn add redux-saga` - установка
 
@@ -19,6 +19,7 @@ const store = createStore(
 
 sagaMiddleware.run(saga);  // watcher
 ```
+___
 
 ## Sagas
 
@@ -26,7 +27,7 @@ sagaMiddleware.run(saga);  // watcher
 - watcher-saga - слушает actions и назначает выполнение worker-saga; в имени обычно используется saga.
 - worker-saga - выполняет делегируемое watcher-saga
 
-> Каждая saga это generator.
+Каждая saga это generator.
 
 ```
 // пример worker-saga; запускает fetchPosts на каждый диспатч экшена POST_REQUESTED
@@ -34,12 +35,11 @@ export function* sags() {
   yield takeEvery(POST_REQUESTED, fetchPost);
 }
 ```
-
 ___
 
 ## Effects
 
-> Это помощники для прослушивания экшенов; импортируются из `redux-saga/effects`.
+Это помощники для прослушивания экшенов; импортируются из `redux-saga/effects`.
 
 `TakeEvery` - хелпер который прослушивает action (конкретный или '*') и запускает worker-saga.
 
@@ -65,12 +65,20 @@ ___
 
 ### Blocking/non-blocking effects
 
-> **Blocking** - когда saga делает yield эффекта, будет ожидать завершения вызова, затем перейдёт к выполнению  
-> следующего эффекта.
+**Blocking** - когда saga делает yield эффекта, будет ожидать завершения вызова, затем перейдёт к выполнению  
+следующего эффекта.
 
-> Блокирующие: call, take, retry, takeMaybe
+**Блокирующие:**
+- call
+- take
+- retry
+- takeMaybe
 
-> Не блокирующие: put, fork, takeEvery, takeLatest
+**Не блокирующие:**
+- put
+- fork
+- takeEvery
+- takeLatest
 
 `all` - блокируется если в массиве есть блокирующий эффект, иначе - не блокирующий.
 
@@ -85,6 +93,7 @@ ___
 `cancel` - эффект отменяет задачу.
 
 `cancelled` - эффект вернёт true если сработал cancel.
+___
 
 ### Take effects
 
@@ -107,7 +116,6 @@ while (true) {
   yield call(handler, action);
 }
 ```
-
 ___
 
 ## Channels
@@ -126,6 +134,7 @@ ___
 сообщения буферизуются по дефолту; используется для общения между сагами.
 
 `channel()` - фабрика создания инстансов каналов.
+___
 
 ### Event channel
 
@@ -133,6 +142,7 @@ ___
 
 `eventChannel(emit => {})` - создать канал; принимает функцию, в которой инициализируется соединение к стороннему  
 источнику событий.
+___
 
 ### Buffers
 
@@ -144,7 +154,6 @@ ___
 - `expanding(initialSize)` - если буфер превысит initialSize, то будет динамически расширяться
 - `dropping(limit)` - как fixed, но излишек игнорируется без ошибки
 - `sliding(limit)` - при превышении лимита, старые сообщения будут отбрасываться
-
 ___
 
 ## Context. Внедрение зависимостей
@@ -163,7 +172,6 @@ const someApi = yield getContext('someApi');
 ```
 
 `getContext/setContext` - получение/расширение контекста.
-
 ___
 
 ## Запуск нескольких саг
@@ -243,7 +251,6 @@ function* rootSaga() {
   ));
 }
 ```
-
 ___
 
 ## Параллельный запуск саг. Race, all
@@ -271,7 +278,6 @@ const { data1, data2 } = yield race({
   data2: fetchData2(),
 });
 ```
-
 ___
 
 ## Select
@@ -290,7 +296,4 @@ const data = yield select();
 
 const posts = yield select((state) => state.posts);
 ```
-
 ___
-
-
