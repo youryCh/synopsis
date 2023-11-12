@@ -27,7 +27,14 @@ alert(1 && 2 && null && 3);  // null
 ```
 ___
 
-`!!` - первое логическое НЕ сначала приводит к булеву типу и инвертирует, второе НЕ ещё раз инвертирует.
+`!!` - первое логическое НЕ сначала приводит к булеву типу и инвертирует, второе НЕ ещё раз инвертирует; по сути  
+приводит к boolean.
+
+```
+const isIE8 = !!navigator.useragent.match(/MSIE 8.0/);
+
+!!someVar === Boolean(someVar);
+```
 ___
 
 **Приоритеты логических операторов:**
@@ -2617,6 +2624,34 @@ const result = await Promise.all([
   fetch(url1),
   fetch(url2)
 ]);  // можно добавить catch для отлова ошибок
+```
+
+### fetch
+
+`fetch(url, options)` - обёртка над promise; then/catch/finally для обработки ответа.
+
+```
+fetch('https://...')
+  .then((response) => response.json())
+  .then((result) => console.log(result))
+  .catch((err => console.error(err)));
+```
+
+```
+fetch(URL, {
+  method: 'POST',
+  mode: 'cors',
+  cache: 'no-cache',
+  headers: {
+    'Content-type': 'application/json'
+  }
+});
+```
+
+fetch обычно отлавливает сетевые ошибки (но не все, например не ловит 404) и направляет в catch, но лучше использовать проверку в then:
+
+```
+if (!response.ok || response.status !== 200)
 ```
 ___
 ___

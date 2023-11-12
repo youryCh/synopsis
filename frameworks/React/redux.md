@@ -342,6 +342,15 @@ const store = createStore(
   applyMiddleware(logger)
 );
 ```
+
+### Redux-saga-routines
+
+Библиотека action creator для Redux.
+
+`yarn add redux-saga-routines`
+
+**Routine** - action creator с 5 стандартными типами экшенов, не нужно для каждого запроса писать экшены для  
+TRIGGER -> REQUEST -> SUCCESS/FAILURE -> FULFILL.
 ___
 
 ## Redux-persist
