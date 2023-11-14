@@ -273,6 +273,26 @@ const mapStateToProps = (state) => {
 };
 ```
 
+Пример функции-генератора mapStateToProps:
+
+```
+// принимает строку с названием компонента, возвращает mapStateToProps
+const mapStateToPropsGenerator = (component) => {
+  switch (component) {
+    case 'Comp1':
+      return (store) => ({  // по сути это mapStateToProps
+        user: store.user
+      });
+    case 'Comp2':
+      return (store) => ({
+        page: store.page
+      });
+    default: 
+      return undefined;
+  }
+};
+```
+
 `mapDispatchToProps()` - передаёт задиспатченные экшены (методы для обновления нужного поля store) в пропсы  
 компонента; т.е. переданный задиспатченный экшен будет доступен через `this.props`
 

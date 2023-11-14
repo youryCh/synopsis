@@ -160,6 +160,14 @@ ___
 `componentDidUpdate()` - вызывается при обновлении state/props после ререндера; первые 2 аргумента state, props до  
 обновления; здесь можно выполнить сравнение состояние и пропсов до и после апдейта.
 
+```
+componentDidUpdate(prevProps) {
+  if (this.props.userId !== prevProps.userId) {
+    this.fetchData(this.fetchUserData(this.props.userId));
+  }
+}
+```
+
 `componentWillUnmount()` - вызывается перед удалением компонента из памяти; здесь можно отменить ранее отправленные  
 запросы, таймеры, подписки на события (чтобы избежать утечки памяти).
 
@@ -419,8 +427,11 @@ ___
 
 `this.state` - объект хранит все переменные состояния.
 
-`this.setState()` - async функция обновления состояния; может принимать вторым аргументом callback, который выполнится  
-когда state изменится.
+`this.setState(updater, cb)` - async функция обновления состояния (React не гарантирует мгновенное изменение state);  
+можно вызывать в теле компонента; добавляет в очередь изменения в state, указывает React на необходимость ререндера;  
+может принимать вторым аргументом callback, который выполнится когда state изменится; параметры: 
+- `updater` - объект или функция (если новое состояние зависит от предыдущего), возвращающая объект `(state, props) => ({...})`
+- `cb` - optional; вызовется после выполнения setState (но лучше использовать `componentDidUpdate()`)
 
 ```
 class Example extends React.Component {
@@ -717,6 +728,9 @@ function Card(props) {
     </din>
   );
 }
+
+// в классовых компонентах
+this.props.children
 ```
 
 **render props** - паттерн дял контроля рендера дочернего компонента; родительский компонент передаёт дочернему  
@@ -1059,8 +1073,313 @@ useEffect(() => {
 
 ```
 componentDidMount() {
-  request();
+  fetch('https://...')
+    .then((response) => response.json())
+    .then((result) => {
+      this.setState({
+        isLoaded: true,
+        data: result
+      });
+    })
+    .catch((err) => {
+      this.setState({
+        isLoaded: false,
+        error: true
+      });
+    });
 }
+```
+___
+___
+
+## Мемоизация компонента
+
+Позволяет избавиться от ненужного рендера.
+
+### В class component
+
+`shouldComponentUpdate(nextProps, nestState)` - позволяет описать условия ререндера; возвращает boolean.
+
+```
+shouldComponentUpdate(nextProps, nextState) {
+  if (nextProps.text === this.props.text) {
+    return false;
+  }
+
+  return true;
+}
+
+// или проще
+shouldComponentUpdate(nextProps, NextState) {
+  return nextProps.text !== this.props.text;
+}
+```
+
+`React.PureComponent` - не перерендерится при получении одинаковых значений props, state; делает поверхностное  
+сравнение (т.е. при изменении полей объекта в пропсах, не делает ререндер).
+
+То есть `React.PureComponent` подходит если достаточно поверхностного сравнения пропсов и стейта (когда имеют  
+примитивные значения). Для глубокого сравнения использовать `React.Component` + `shouldComponentUpdate`.
+
+### В function component
+
+`React.memo(Comp, skipRender(prevProps, nextProps))` - то же что React.PureComponent + shouldComponentUpdate в  
+классовых компонентах; принимает мемоизируемый компонент и функцию сравнения; может мемоизировать function и class  
+components.
+
+Функция сравнения должна вернуть true - пропустить рендер, false - рендер (в shouldComponentUpdate ровно наоборот).
+
+```
+const ChildMemo = React.memo(Child, (prevProps, nextProps) => {
+  return prevProps.text === nextProps.text;
+});
+```
+
+`React.memo(Comp)` - без второго аргумента то же что PureComponent; т.е. не перерендерит при том же значении  
+props/state при поверхностном значении.
+
+**Зачем memo?**
+```
+const App = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>Click</button>
+      <ExpensiveComponent />  // вот это лучше обернуть в memo, т.к. он будет ререндериться при каждом
+    </>                       // изменении count
+  );
+};
+```
+
+|  component  |      shallow equal       |                    deep equal                |
+|-------------|--------------------------|----------------------------------------------|
+|    class    |   React.PureComponent    | React.PureComponent + shouldComponentUpdate()|
+|  function   |    React.memo(Comp)      |          React.memo(Comp, skipRender)        |
+___
+___
+
+## React Profiler
+
+Инструмент react devtools для контроля рендера и оптимизации (типа lighthouse).
+___
+___
+
+## PWA
+
+**Progressive web application** - приложение может частично работать без интернета, как десктопное/мобильное.
+
+Использует обёртку браузера без элементов управления. Может работать без инэта - использует push через webWorker.  
+Примерно то же делает Electron.  
+
+Pwa не работает в ios, safari запрещает pwa
+
+`manifest.json` в cra - это для pwa.
+___
+___
+
+## Class component
+
+### render
+
+`render()` - при вызове проверяет `this.props/this.state`; возвращает:
+- react element (jsx разметка)
+- массивы и фрагменты
+- порталы
+- строки и числа (text node)
+- boolean, null (ничего не рендерит)
+
+`render()` должна быть чистой функцией.  
+Не вызывается если `shouldComponentUpdate()` вернёт false.
+
+### constructor
+
+`constructor()` - вызывается до mount; используется для:
+- инициализации state
+- bind обработчиков к экземпляру
+
+`constructor()` можно не использовать, если не определяем state и не биндим методы.  
+В конструкторе сначала нужно вызывать `super(props)`, иначе `this.props` будет undefined.
+
+```
+class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {}
+
+  render() {}
+}
+```
+
+### getDerivedStateFromProps
+
+`getDerivedStateFromProps(props, state)` - позволяет изменять state в ответ на изменение пропсов без дополнительного  
+рендера; возвращает объект для обновления state или null; вызывается перед каждым рендером.
+
+Метод существует для тех редких случаев, когда state зависит от изменений в пропсах.
+
+```
+static getDerivedStateFromProps(props, state) {
+  if (props.userId !== state.prevPropsUserId) {
+    return {
+      prevPropsUserId: props.userId,
+      email: props.defaultEmail
+    };
+  }
+
+  return null;
+}
+```
+___
+
+### getSnapshotBeforeUpdate
+
+`getSnapshotBeforeUpdate(prevProps, prevState)` - позволяет получать инфо из DOM перед изменением (например  
+положение scroll); вызывается перед обновлением DOM, после render(); значение возвращённое этим методом передаётся  
+как параметр `snapshot` в `componentDidUpdate()`.
+
+```
+class ScrollingList extend React.Component {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.list.length < this.props.list.length) {
+      const list = this.listRef.current;
+
+      return list.scrollHeight - list.scrollTop;  // запоминаем значение, чтобы использовать позже
+    }
+
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (snapshot !== null) {
+      const list = this.listRef.current;
+
+      list.scrollTop = list.scrollHeight - snapshot;
+    }
+  }
+
+  render() {
+    return <div ref={this.listRef}></div>;
+  }
+}
+```
+___
+
+### ref
+
+```
+class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+
+  render() {
+    return (
+      <div ref={this.ref}></div>
+    );
+  }
+}
+
+console.log(this.ref.current);
+```
+___
+
+### Error boundary
+
+**Error boundary** - (предохранитель) компонент React, который отлавливает ошибки js в дереве дочерних компонентов,  
+сохраняет их в логе и выводит запасной ui; ошибки не отловленные предохранителем ведут к размонтированию приложения.
+
+Не отловит ошибку, если она:
+- в обработчике событий
+- в async коде
+- server-side rendering
+- в самом предохранителе
+
+Классовый компонент является предохранителем, если имеет хотя бы один из методов:
+- `getDerivedStateFromError()` - для рендера запасного ui
+- `componentDidCatch()` - для логирования ошибок
+
+`getDerivedStateFromError(error)` - static; вызовется после возникновении ошибки у компонента потомка; возвращает  
+значение для обновления state; сработает во время рендера - нельзя использовать side effects.
+
+`componentDidCatch(error, info)` - вызывается после возникновения ошибки; используется для логирования ошибок;  
+вызывается во время фиксации - можно использовать side effects; обработка ошибок отличается в разных средах:
+- develop - ошибки всплывают до window (можно перехватить через window.onerror, window.addEventListener('error'), cb)
+- production - ошибки не всплывают
+
+- `error` - перехваченная ошибка
+- `info` - объект с полем `componentStack`
+
+```
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {hasError: false};
+  }
+
+  static getDerivedStateFromError(error) {
+    return {hasError: true};  // обновить состояние, чтобы при следующем рендере показать запасной ui
+  }
+
+  componentDidCatch(error, info) {
+    sendLogSomewhere(error, info);
+  }
+
+  // обработка ошибок в хендлере (не ловится предохранителем)
+  handleClick() {
+    try {
+      ...
+    } catch (err) {
+      this.setState({error});
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong!</h1>;
+    }
+
+    return this.props.children;
+  }
+}
+```
+___
+
+### forceUpdate
+
+`forceUpdate()` - вызывает рендер, пропуская shouldComponentUpdate; используется редко и не особо приветствуется;  
+вызывается непосредственно из тела компонента (как setState).
+
+```
+rerender() {
+  this.forceUpdate();
+}
+
+render() {
+  return <input type="button" onClick={this.render} />;
+}
+```
+___
+
+### defaultProps
+
+`defaultProps` - свойство классового компонента для установки дефолтных пропсов; сработает если пропсы не переданы  
+или undefined (null - валидный проп).
+
+```
+Example.defaultProps = {
+  color: 'blue'
+};
 ```
 ___
 ___
