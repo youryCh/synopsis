@@ -40,6 +40,7 @@ ___
 
 ## isOnline react hook
 
+```
 export const useDetectOnLine = () => {
   const [online, setOnline] = useState(true);
 
@@ -60,6 +61,7 @@ export const useDetectOnLine = () => {
 
   return online;
 };
+```
 ___
 
 
