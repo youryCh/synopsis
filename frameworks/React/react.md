@@ -210,7 +210,7 @@ class App extends React.Component {
 5. child componentDidMount
 6. componentDidMount
 
-`getDerivedStateFromProps(props, state)` - для установки initial state из props; вызывается всегда перед render().
+`getDerivedStateFromProps(props, state)` - (derived - производное) для установки initial state из props; вызывается  всегда перед render().
 
 `getSnapshotBeforeUpdate()` - позволяет брать информацию DOM перед возможным изменением; вызывается перед  
 фиксированием.
@@ -1217,8 +1217,9 @@ class Example extends React.Component {
 
 ### getDerivedStateFromProps
 
-`getDerivedStateFromProps(props, state)` - позволяет изменять state в ответ на изменение пропсов без дополнительного  
-рендера; возвращает объект для обновления state или null; вызывается перед каждым рендером.
+`getDerivedStateFromProps(props, state)` - (derived - производное) позволяет изменять state в ответ на изменение  
+пропсов без дополнительного рендера; возвращает объект для обновления state или null; вызывается перед каждым  
+рендером.
 
 Метод существует для тех редких случаев, когда state зависит от изменений в пропсах.
 
