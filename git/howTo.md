@@ -34,7 +34,6 @@ ___
    sed -i 's/github.com/github.enterprise.tech/g' .git/config
    ```
 2. `git remote set-url origin git@github.com/...repo.git`
-
 ___
 
 ### Cherry-pick
@@ -44,7 +43,6 @@ ___
 Как работает:
 1. Находим нужный коммит на Github или через список локально (`git log --oneline`)
 2. Выполняем `git cherry-pick <hash>` на ветке, в которую надо перенести коммит.
-
 ___
 
 ## Доступ к git info из кода
@@ -54,7 +52,6 @@ process.env.GIT_VERSION
             GIT_COMMITHASH
             GIT_BRANCH
 ```
-
 ___
 
 ## Push error
@@ -64,7 +61,6 @@ ___
 `git config --global user.name 'name'`
 
 `git config --global user.email 'email'`
-
 ___
 
 ## Добавить SSH-key
@@ -79,7 +75,6 @@ ___
 - в SSH keys создать новый ключ и вставить содержимое паблик-ключа
 
 > Текущий ключ можно посмотреть в `C:/users/yuri/.ssh/id_rsa.pub`
-
 ___
 
 ## Быстро клонировать репозиторий
@@ -88,7 +83,6 @@ ___
 - создать директорию с названием проекта
 - ПКМ -> Git Bush Here
 - `git clone <вставить_ссылку>`
-
 ___
 
 ## Как править merge конфликты
@@ -101,7 +95,6 @@ ___
 - commit message 'Resolve merge conflicts'
 - пушим в remote repo
 - мержим через GitLab
-
 ___
 
 ## Как подтянуть изменения мастер-ветки
@@ -109,19 +102,16 @@ ___
 > Если мастер-ветка менялась после чекаута фича-ветки, то лучше подтянуть изменения и порешать возможные конфликты локально, перед MR/PR.
 
 `git pull origin develop`
-
 ___
 
 ## Поиск в GitHub
 
 `/` - откроет строку поиска; можно искать по репозиторию или по всем репам.
-
 ___
 
 ## Сделать пустой коммит
 
 `git commit -m 'message' --allow-empty` - пустой коммит без изменений; например стриггерить деплой.
-
 ___
 
 ## Rebase
@@ -130,14 +120,19 @@ ___
 - `git pull` - to get most up-to-date version of the main branch
 - `git switch feature` - to get back on the feature branch
 - `git rebase main`- to perform rebase; with `-i` - interactive rebase? where you can pick commits, rename, squash and more.
-
 ___
 
 ## Pre-commit error
 
 - удалить директорию `.git/hooks`
 - `npm rebuild`
-
 ___
 
+## Объединить несколько коммитов
 
+1. `git rebase -i HEAD~3` - 3 последних коммита; откроет vi окно
+2. у нужных коммитов поменять pick на squash; ESC -> :qw
+3. откроется окно редактирования commit message; ESC -> :qw
+
+Это создаст новый коммит, объдиняющий выбранные в один. Всё это можно сделать в отдельной ветке и черрипикнуть куда надо.
+___
