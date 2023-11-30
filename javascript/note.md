@@ -255,6 +255,6 @@ ___
 ответа.
 
 ```
-const isAdult = confirm('ВАм есть 18 лет?');
+const isAdult = confirm('Вам есть 18 лет?');
 ```
 ___
