@@ -300,4 +300,297 @@ ___
 
 ## Стили, классы
 
+**Инлайн** стили используются если нужно работать со стилями динамически.
+___
+
+`className` - то же что class, сохранено т.к. слово class было зарезервировано, нельзя было использовать в объекте.
+___
+
+`el.classList` - специальный объект для работы с классами; имеет методы:
+- `.add(class)`
+- `.remove(class)`
+- `.toggle(class)` - добавит класс если его нет, удалит если есть
+- `.contains(class)` - проверит наличие класса
+
+`classList` можно перебирать в `for of`.
+___
+
+`style` - объект соответствующий атрибуту style; не учитывает каскад; свойства с тире/подчеркиванием преобразует в  
+camelCase.
+
+```
+el.style.backgroundColor = 'red';
+```
+___
+
+**Сброс стиля** - нужно присвоить пустую строку, тогда браузер применит дефолтные стили.
+___
+
+`style.cssText` - для присваивания нескольких стилей одной строкой; затирает все стили элемента.
+
+```
+div.style.cssText = `
+  color: red !important;
+  width: 100px;
+`;
+```
+
+То же можно сделать через `setAttribute('style', '...')`.
+___
+
+`getComputedStyle(element, [pseudo])` - вернёт объект со всеми применёнными стилями с учётом каскада; не покажет  
+`:visited`.  
+- `pseudo` - если нужен псевдоэлемент (например `::before`)
+
+```
+const allStyles = getComputedStyle(document.body);
+```
+___
+
+`:visited` - псевдокласс применяется к уже посещённым ссылкам, меняя стиль; из-за приватности браузер ограничивает  
+использование этого псевдокласса.
+___
+___
+
+## Scroll
+
+`offsetParent` - предок используемый при вычислении координат.
+
+`offsetLeft/Right` - координаты относительно левого/правого верхнего угла offsetParent.
+
+`offsetHeight/Width` - внешний размер элемента включая border; если элемент скрыт, то == 0.
+
+```
+// проверка на видимость
+const isHidden = (el) => !el.offsetHidden && !el.offsetHeight;
+```
+
+`clientTop/Left` - отступы внутренней части элемента от внешней (обычно это размер border, кроме случая письма  
+справа-налево).
+
+`clientWidth/Height` - размер контентного блока с paddings, но с вычетом scroll.
+
+`scrollWidth/Height` - общий размер элемента с учётом не видимой из-за прокрутки части; как и с clientWidth, включает  
+паддинги, исключает scrollWidth (обычно 16px).
+
+```
+// разворачивание элемента
+el.style.height = `${el.scrollHeight}px`;
+```
+
+`scrollLeft/Top` - размер прокрученной невидимой части элемента; свойство доступно для изменения (от левого верхнего  
+угла).
+
+```
+// браузер прокрутит вверх или в конец
+el.scrollTop = 0;
+el.scrollTop = Infinity;
+```
+___
+
+`document.documentElement` - корневой html элемент.
+
+```
+// размер общего контентного блока (за вычетом scrollbar)
+documentElement.clientHeight
+```
+___
+
+**Полная высота документа со скроллом:**
+
+```
+const scrollHeight = Math.max(
+  document.body.scrollHeight,
+  document.documentElement.scrollHeight,  // должно хватить этого только, остальное по историческим причинам
+  document.body.offsetHeight,
+  document.documentElement.offsetHeight,
+  document.body.clientHeight,
+  document.documentElement.clientHeight
+);
+```
+___
+
+**Получить текущий scroll:**
+1. `documentElement.scrollTop/Left`
+2. `window.pageYOffset/pageXOffset`
+___
+
+Для корректной работы прокрутки, html быть полностью загружен, для этого использовать script в конце body или  
+аргумент defer.
+___
+
+**Прокрутить страницу:**
+1. `document.documentElement.scrollTop/Left`
+2. `document.body.scrollTop/Left`
+3. `scrollBy(x, y)` - прокрутка относительно текущего положения
+   `scrollTo(x, y)` - прокрутка на абсолютные координаты
+
+```
+// скролл в начало документа
+window.scrollTo(0, 0);
+```
+___
+
+`scrollIntoView(top)` - прокрутка страницы так чтобы элемент оказался вверху.  
+- `top` - true - в верхнюю часть окна; false - внизу окна
+
+```
+el.scrollIntoView(true)
+```
+___
+
+**Запретить прокрутку:**
+
+```
+document.body.style.overflow = 'hidden';
+```
+
+Чтобы контент не дёргался при исчезновении scrollbar, можно добавить padding.
+___
+
+## Позиционирование. Координаты
+
+2 системы координат:
+1. относительная:
+   - `position: fixed;` - относительно верхнего левого угла текущего viewport
+   - `position: relative;` - относительно ближайшего элемента с `absolute`
+2. абсолютное:
+   - `position: absolute;` - относительно верхнего левого угла всего документа
+
+Если нет прокрутки, то эти координаты совпадают.
+___
+
+`el.getBoundingClientReact()` - вернёт объект DOMRect с координатами элемента относительно окна;  
+свойства объекта:  
+- `x/y` - начало прямоугольника относительно окна
+- `width/height`
+- `top/bottom` - верхняя/нижняя границы
+- `left/right` - левая/правая граница
+___
+
+`el.elementFromPoint(x, y)` - вернёт элемент находящийся на этих координатах (самый глубоко вложенный); работает  
+только с видимой частью окна, для остального вернёт null.
+
+```
+// получить элемент из центра экрана
+const centerX = document.documentElement.clientWidth / 2;
+const centerY = document.documentElement.clientHeight / 2;
+
+const resEl = document.elementFromPoint(centerX, centerY);
+```
+___
+___
+
+## Events
+
+**Событие** - сигнал от браузера что что-то произошло; обрабатываются асинхронно (например если во время выполнения  
+click сработает ещё один click, то он будет ждать в очереди macrotask).
+___
+
+**Навесить обработчик можно:**
+
+(1)
+
+Обработчик внутри html тега с помощью атрибута `on<event_name>="..."`
+
+```
+<input onclick="clickHandler()" />  // все html атрибуты регистронезависимы
+```
+
+(2)
+
+Навесить обработчик через свойство DOM элемента
+
+```
+<input id="elem" />
+
+<script>
+  elem.onclick = () => console.log('Hi!');  // DOM свойства чувствительны к регистру, в отличии от html тегов
+
+  // удалить обработчик
+  elem.onclick = null;
+</script>
+```
+
+(3)
+
+Назначить/удалить обработчик через специальные методы:
+- `addEventListener()`
+- `removeEventListener()`
+
+`addEventListener` в отличии от других способов, позволяет навесить несколько обработчиков на одно событие. Также  
+некоторые события слушаются только через addEventListener, например DOMContentLoaded.
+___
+
+`this` в хендлере:  
+- в обычной функции - сам текущий элемент
+- в стрелочной - window
+___
+
+`el.addEventListener(event, handler, [options])` - навесить обработчик на событие;  
+- `event` - event name
+- `handler` - функция или объект с методом `handleEvent(event)`; принимает аргументом `event` - объект содержит  
+  подробности события; 
+- `options:`
+  - `once` - если true, то handler сам удалится после одного выполнения
+  - `capture` - обработчик сработает на фазе погружения
+  - `passive` - если true, то обработчик не вызовет `preventDefault()` если он есть
+
+Если третий аргумент указать как true/false, то это значение отнесётся к `capture` (по историческим причинам).
+
+```
+// несколько слушателей на одно событие
+input.onclick = () => alert(1);
+input.addEventListener('click', () => alert(2));
+input.addEventListener('click', () => alert(3), {once: true});
+
+// при первом клике отработают все три алерта, затем только 2
+```
+
+```
+// объект-обработчик
+el.addEventListener('click', {
+  handleEvent(event) {  // при событии будет вызван метод с таким именем, если передан объект в handler
+    alert(event.type);
+  }
+});
+```
+___
+
+`el.removeEventListener(event, handler, [options])` - удалить обработчик события; должен принимать тот же handler,  
+что передан в слушатель события.
+___
+
+**class-handler:**
+
+```
+class Menu {
+  handleEvent(e) {
+    const method = `on${e.type.at(0).toUpperCase()}${e.type.slice(1)}`;
+
+    this[method](e);
+  }
+
+  onMousedown() {...}
+
+  onMouseup() {...}
+}
+
+const menu = new Menu;
+
+el.addEventListener('mousedown', menu);
+el.addEventListener('mouseup', menu);
+```
+___
+
+`DOMContentLoaded` - событие загрузки и построения DOM; слушать только через addEventListener.
+___
+___
+
+### Всплытие событий
+
+**Всплытие** - bubbling; обработчик сначала сработает на самом элементе, далее вверх по цепочке вложенности сработает  
+на всех родительских элементах (если у них навешен обработчик).
+___
+
 
