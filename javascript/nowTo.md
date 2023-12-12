@@ -108,4 +108,24 @@ _.isEqual(a, b);  // true
 ```
 ___
 
+## Отменить выделение текста
+
+```
+el.addEventListener('mousedown', (e) => e.preventDefault());
+
+// или
+<p onmousedown="return false">Text</p>
+```
+___
+
+## Отменить копирование текста
+
+```
+el.addEventListener('copy', (e) => e.preventDefault());
+
+// или
+<p oncopy="return false">Text</p>
+```
+___
+
 

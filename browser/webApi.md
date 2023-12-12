@@ -14,31 +14,40 @@ const onShowNotification = () => new Notification(...);
 
 const onClose = () => Notification.close();
 ```
-
 ___
 
 ##  Navigator
 
-> **navigator** - интерфейс доступа для свойств и методов user agent.
+`navigator` - интерфейс доступа для свойств и методов user agent; содержит:  
+- `online` - подключен ли интернет
+- `vibrate()`
+- `scheduling:`
+  - `isInputPending()` - взаимодействует ли пользователь со страницей сейчас
+- `clipboard:` - для работы с буфером
+  - `write()` - для сохранения данных в буфер; универсальный; асинхронный (вернёт Promise)
+  - `writeText()` - только для текста; асинхронный
+  - `read()` - чтение из буфера (браузер покажет модалку с запросом согласия на чтение)
+  - `readText()`
+- `permissions:` - для работы с разрешениями юзера (показывает модалки браузера)
+  - `query()` - покажет модалку с запросом разрешения юзера; вернёт Promise
+- `geolocation:`
+  - `getCurrentPosition()` - браузер кинет окно запроса разрешения; вернёт объект геолокации
+  - `watchPosition()` - вернёт callback, который вызовется при смене позиции
+  - `clearWatch()` - удаляет коллбек установленный через watchPosition
 
 ```
-navigator.online;  // показывает подключение клиента к интернету
-                   // также есть события window 'onLine', 'offLine'
-
+navigator.online;  // также есть события window 'onLine', 'offLine'
 navigator.vibrate();
-```
-
-`isInputPending()` - вернёт true если пользователь пытается взаимодействовать со страницей.
-
-```
 navigator.scheduling.isInputPending();
+window.navigator.permissions.query({
+  name: 'clipboard-read'  // или clipboard-write
+});
 ```
-
 ___
 
 ## Scheduler API
 
-`window.scheduler` - Механизм браузера для планирования задач в main thread.
+`window.scheduler` - механизм браузера для планирования задач в main thread.
 
 `postTask(task, [options])` - позволяет планировать задачи, разбивать long task.
   - `task` - функция для планирования
@@ -53,7 +62,6 @@ scheduler.postTask(showSpinner, {
   priority: 'user-blocking'
 });
 ```
-
 ___
 
 `windows.postMessage(message, targetOrigin)` - метод для кроссдоменной отправки сообщений (между разными окнами браузера).
@@ -68,7 +76,6 @@ otherWindow.postMessage(message, targetOrigin);
 
 // otherWindow - ссылка на другое окно (из window.open например)
 ```
-
 ___
 
 `window.requestIdleCallback()` - переданная функция будет вызываться во время простоя браузера.
@@ -83,8 +90,9 @@ const handle = window.requestIdleCallback(
 ```
 
 `window.cancelIdleCallback(id)` - для отмены коллбеков.
-
 ___
+
+## Crypto
 
 `crypto` - [doc](https://developer.mozilla.org/ru/docs/Web/API/Crypto) веб-интерфейс; предоставляет базовые криптографические функции.
 
@@ -95,7 +103,6 @@ window.crypto.getRandomValues(arr);  // сделает массив крипто
 
 // и много других методов
 ```
-
 ___
 
 ## Audio API usage example
@@ -127,7 +134,4 @@ function beep() {
 
 useEffect(() => beep(), []);
 ```
-
 ___
-
-
