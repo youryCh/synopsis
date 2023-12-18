@@ -873,4 +873,39 @@ ___
 ___
 ___
 
+## Forms
 
+`document.forms[name/index]` - коллекция форм.
+
+`form.elements[name/index]` - элементы формы (полученной через свойство выше).
+
+`element.form` - каждый элемент формы хранит ссылку на форму.
+
+**Доступ к значению:**
+- `input.value`
+- `textarea.value`
+- `input.checked` - for checkbox
+- `select.value`
+___
+
+### Select
+
+[Doc](https://html.spec.whatwg.org/multipage/form-elements.html#the-select-element)
+
+Свойства:
+- `select.options` - options collection
+- `select.value` - picked option
+- `select.selectedIndex` - picked option index
+- `select.options[0].selected` - default option
+
+`multiple` - html-атрибут; позволяет выбрать несколько options одновременно.
+
+```
+<select id="select" multiple>
+  <option value="1" selected>One</option>
+  <option value="2" selected>Two</option>
+  <option value="3">Three</option>
+</select>
+```
+
+`new Option(text, value, defaultSelected, selected)` - создать option.
