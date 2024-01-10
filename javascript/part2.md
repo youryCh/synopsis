@@ -993,6 +993,98 @@ ___
 
 `readystatechange` - событие document для отслеживания состояния загрузки html; то же что `readyState`.
 ___
+
+`load`,  
+`error` - события успешная загрузка/ошибка, для отслеживания загрузки сторонних ресурсов (script, iframe, img);  
+error не отработает при рантайм ошибке скрипта (для этого window.onerror); для iframe для успеха и ошибки сработает  
+load событие.
+
+```
+const script = document.createElement('script');
+
+script.src = 'https://.../lodash.js';
+document.head.append(script);
+
+script.onload = () => {
+  console.log(_.VERSION);  // здесь доступны переменные загруженного скрипта
+};
+```
 ___
+___
+
+## defer async
+
+`defer` - (отложить) атрибут тега script (для внешних скриптов с `src`, иначе игнорируется); парсит скрипт  
+параллельно с html, но выполняет после полного построения DOM, чтобы не блокировать рендер, до события  
+DOMContentLoaded; сохраняет порядок скриптов.
+
+`async` - атрибут script для асинхронной загрузки скрипта; не блокирует рендер; скрипт выполнится в порядке  
+загрузки (не гарантирует порядок); полезно для загрузки внешних независимых скриптов; атрибут работает только для  
+внешних скриптов (с src).
+
+**Динамическая загрузка скрипта** - скрипт выполнится сразу как добавится в document; работает как async скрипт,  
+если важен порядок, нужно явно отменять async.
+
+```
+const script = document.createElement('script');
+
+script.src = './script.js';
+script.async = false;  // отменит асинхронное поведение
+document.body.append(script);
+// или
+document.head.append(script);
+```
+___
+
+`crossorigin` - атрибут тега script для работы с CORS политиками; значения:
+- без атрибута CORS запрещён
+- ` anonymous` - доступ разрешён если сервер вернул заголовок `Access-Control-Allow-Origin: */our_domain`
+- `use-credentials` - разрешает доступ и отправку кук и auth info, если сервер вернул  
+`Access-Control-Allow-Origin: *` и `Access-Control-Allow-Credentials: true`.
+___
+___
+
+## MutationObserver
+
+`new MutationObserver(cb)` - встроенный класс; позволяет реагировать в ответ на изменение DOM (атрибуты, изменение  
+элементов, содержания нод) и запускать переданный коллбек; полезно для работы со сторонними скриптами.
+- `cb` - коллбек выполнится при изменениях; изменения получает первым аргументом - список объектов MutationRecord.
+
+`.observe(node, config)` - статичный метод инстанса MutationObserver; принимает:  
+- `node` - наблюдаемая нода
+- `config` - объект с булевыми параметрами, определяет на какие изменения реагировать
+  - `childList` - изменения в чилдах ноды
+  - `subtree` - во всех потомках ноды
+  - `attributes` - в атрибутах ноды
+  - `attributeFilter` - массив конкретных атрибутов для наблюдения
+  - `characterData` - наблюдать за `node.data` (для текстовых нод)
+  - `characterDataOldValue` - передавать старое и новое значение `node.data` в коллбек
+  - `attributeOldValue` - передавать старое и новое значение атрибута в коллбек
+
+`.disconnect()` - прекратить наблюдение.
+
+`.takeRecords()` - вернёт список необработанных коллбеком записей.
+
+```
+const observer = new MutationObserver(cb);
+
+observer.observe(node, config);
+```
+
+`MutationRecord` - тип объекта, который получаем в коллбеке, переданном в конструктор MutationObserver; имеет  
+свойства:  
+- `type` - тип изменения:
+  - `attributes` - изменён атрибут
+  - `characterData` - изменены данные `el.data` (для текстовых нод)
+  - `childList` - добавлены/удалены дочерние элементы
+- `target`
+- `addedNodes/removedNodes`
+- `previousSibling/nextSibling`
+- `attributeName/attributeNamespace` - (namespace для xml)
+- `oldValue` - если включена `attributeOldValue`
+___
+___
+
+## Selection, Range
 
 
