@@ -949,7 +949,7 @@ export const UserContext = React.createContext();
 
 export default function App() {
   return (
-    <UserContext.Provider value="Reed">
+    <UserContext.Provider value="Read">
       <User />
     </UserContext.Provider>
   );
@@ -974,7 +974,7 @@ const ThemeContext = React.createContext({
 });
 ```
 
-`Context.Provider` - компонент-обёртка над корневым компонентом (или самым верхним из тех, которые используют  
+`Context.Provider` - компонент-обёртка над корневым компонентом (или самом верхнем из тех, которые используют  
 контекст); принимает атрибут `value` - значение, которое будет передано в компонент.
 
 ```
