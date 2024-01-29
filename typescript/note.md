@@ -1,6 +1,7 @@
 **typeHinting** - подсказка типов в IDE.
-
 ___
+
+## as const
 
 `as const` - создаёт readonly tuple из массива.
 
@@ -26,7 +27,4 @@ type T = keyof Date;
 
 type T2 = keyof typeof obj;  // тоже из ключей объекта
 ```
-
 ___
-
-
