@@ -1085,6 +1085,106 @@ observer.observe(node, config);
 ___
 ___
 
-## Selection, Range
+## Выделение
 
+### Selection, Range
 
+`Range` - встроенный класс для работы с выделением текста в документе; задаёт границы диапазона.
+
+Встроенные методы Range:
+- `setStart(node, offset)` - установит начальную границу в позицию offset в node
+- `setStartBefore(node)` - установит начальную границу перед node
+- `setStartAfter(node)` - установит границу после node
+- `setEnd(node, offset)` - тоже но для конечной границы
+- `setEndBefore(node)`
+- `setEndAfter(node)`
+- `selectNode(node)` - выделить всю ноду
+- `selectNodeContents(node)` - выделить всё содержимое ноды
+- `collapse()` - схлопывает диапазон
+- `cloneRange()`
+- `deleteContents()`
+- `extractContents()`
+- `cloneContents()` - склонировать контент, вернуть как DocumentFragment
+- `insertNode(node)` - вставить ноду в начале диапазона
+- `surroundContents(node)` - обернуть node вокруг контента
+
+```
+const range = new Range();
+
+range.setStart(span, 2);
+range.setEnd(span, 4);
+
+window.getSelection().addRange(range);
+```
+___
+
+`Selection` - объект выделения; получить можно через `window.getSelection()`; anchor - начало выделения,  
+focus - конец; focus может быть впереди anchor, если выделение справа-налево.
+
+Свойства Selection:
+- `anchorNode` - нода с которой началось выделение
+- `anchorOffset` - смещение в начальной ноде
+- `focusNode` - нода в которой закончилось выделение
+- `focusOffset` - смещение в конечной ноде
+- `isCollapsed` - true если диапазон отсутствует
+- `rangeCount` - количество диапазонов (больше одного только в Firefox)
+
+[Selection methods doc](https://learn.javascript.ru/selection-range)
+___
+
+`el.onselectstart` - событие начало выделения текста.
+
+`document.onselectionchange` - событие изменения выделения.
+
+`document.getSelection().toString()` - получить всё выделение.
+___
+
+### Выделение в формах
+
+Для форм не нужны Range, Selection, есть свои встроенные свойства и методы:
+- `input.selectionStart`
+- `input.selectionEnd`
+- `input.selectionDirection:`
+  - `forward`
+  - `backward`
+  - `none`
+- `input.select()` - выделить всё
+- `input.setSelectionRange(start, end, [direction])` - изменить выделение
+- `input.setRangeText(replacement, [start, end, selectionMode])` - заменить выделенное новым текстом
+  - `selectionMode:` - `select`, `start`, `end`, `preserve`
+___
+
+`input.onselect` - событие завершения выделения.
+___
+
+**Как сделать невыделенным:**
+1. CSS-свойство `user-select: none`
+2. предотвратить дефолтное поведение: `el.onselectstart = () => false`
+3. стереть значение после выделения: `document.getSelection().empty()`
+___
+___
+
+## Event loop
+
+**Event loop** - по сути бесконечный цикл JS движка, ожидает задачи, формирует из них очередь, выполняет по  
+принципу FIFO и снова ждёт.
+
+Рендер не происходит во время выполнения task.
+
+Долгая задача блокирует очередь, через время браузер предлагает убить её.
+
+**Microtask** - генерируются в коде; микрозадачи генерируются с помощью:  
+- `.then`, `.catch`, `.finally`
+- `await`
+- `queueMicrotask()`
+___
+
+`setTimeout(f, 0)` - добавить задачу в очередь макрозадач.
+
+`queueMicrotask(f)` - добавить задачу в очередь микротаск.
+___
+
+`Web Workers` - выполнение кода в параллельном потоке, со своим event loop и переменными окружения; не имеет  
+доступа к DOM; можно обмениваться сообщениями с основным потоком; можно использовать для тяжёлых задач.
+___
+___

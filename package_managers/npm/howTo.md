@@ -1,10 +1,9 @@
 ## Обновить npm до последней версии
 
 `npm i -g npm@latest`
-
 ___
 
-## Как поставить nvm
+## Поставить nvm
 
 > На `geeksforgeeks.org` есть дистрибутив `nvm-setup.zip`, распаковать, запустить installer.
 
@@ -21,6 +20,13 @@ ___
 `nvm use 14` - переключиться на ^14 версию, либо точно указывать версию.
 
 Bash запускать as Admin.
-
 ___
 
+## Изменить адрес реестра пакетов
+
+`npm config list` - посмотреть текущий конфиг npm.
+
+`npm config set registry <regictry_url>` - установить дефолтный реестр.
+
+`npm config set @<SCOPE>:registry <registry_url>` - for scoped packages.
+___

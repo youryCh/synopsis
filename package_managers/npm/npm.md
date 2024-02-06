@@ -15,7 +15,6 @@ ci - clean install.
 > npm ci намного быстрее npm i
 
 > Если npm ci не доступен то: `npm install -g npm@latest`
-
 ___
 
 ## npm error ssl
@@ -23,7 +22,6 @@ ___
 `npm config set strict-ssl false`
 
 `npm config list` - текущий конфиг.
-
 ___
 
 ## About packages
@@ -84,7 +82,6 @@ npm i
 
 `npm update` - обновляет пакеты с учётом семвера, обновляет манифест.
   - `--depth=9999` - для всех транзитивных зависимостей
-
 ___
 
 ## Npm-check
@@ -96,7 +93,6 @@ ___
 
 `npm-check` - запуск проверки.
   - `-i` - интерактивный режим
-
 ___
 
 `npm uninstall/rm/r/un` - удаление зависимости из проекта и манифеста.
@@ -107,7 +103,6 @@ npm rm lodash express
 ```
 
 `npm view @types/<package_name>` - поиск декларации типа в репозитории Definitely Typed.
-
 ___
 
 ## Lock file
@@ -124,12 +119,12 @@ ___
 > Поэтому файл не одинаковый в разное время.
 
 > Lock-file не публикуется в registry.
-
 ___
 
 ## Npm-shrinkwrap
 
-`npm-shrinkwrap.json` - тот же package-lock.json, но с другим именем и семантикой; в отличии от package-lock, публикуется в npm registry; фактически замораживает дерево зависимостей, даже если это опубликованный пакет.
+`npm-shrinkwrap.json` - тот же package-lock.json, но с другим именем и семантикой; в отличии от package-lock, публикуется в npm  
+registry; фактически замораживает дерево зависимостей, даже если это опубликованный пакет.
 
 > Имеет приоритет над package-lock. В проекте достаточно одного из них.
 
@@ -145,10 +140,10 @@ ___
 
 `npm adduser` - авторизовать нового пользователя.
 
+`npm login` - login to a registry user account; логин если используется приватный реестр пакетов; предложит ввести логин-пароль.
 ___
 
 `npm rebuild` - ребилдит проект, например при обновлении версии ноды.
-
 ___
 
 
