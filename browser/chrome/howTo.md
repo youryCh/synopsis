@@ -34,3 +34,8 @@ ___
 
 **HSTS** - is HTTP Strict Transport Security: a way for sites to elect to always use HTTPS.
 ___
+
+## Add SSL certificate
+
+`chrome://settings/security` -> Manage certificates -> Import
+___
