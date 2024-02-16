@@ -773,6 +773,7 @@ ___
 - `path` - url
 - `exact` - требует точного совпадение url
 - `component` - принимает компонент
+- `element` - принимает reat element (по сути тот же component)
 - `render` - принимает функцию рендера компонента; содержит параметры:
   - `history`
   - `location`
