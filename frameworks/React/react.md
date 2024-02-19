@@ -255,7 +255,7 @@ useEffect(() => {
   return () => {
     window.removeEventListener('resize', handleResize);
   };
-});
+}, []);
 ```
 
 useEffect может вернуть только функцию, поэтому нельзя объявить async useEffect (т.к. async функция вернёт промис).  
