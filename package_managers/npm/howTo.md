@@ -30,3 +30,22 @@ ___
 
 `npm config set @<SCOPE>:registry <registry_url>` - for scoped packages.
 ___
+
+## Настроить доступ в приватный регистр
+
+1. Создать `.npmrc` в корне проекта.
+2. ```
+    --init-author-name=John Doe
+    --init-author-email=john.doe@corp.pro
+    email=your.name@corp.pro
+    always-auth=true
+    registry=https://private-registry-url/
+    //same-registry-url-without-https/:_auth=your_credentials_in_base64
+   ```
+   Все эти настройки можно установить через:
+    -  `npm set https://private-registry-url`
+    -  `npm set _auth=base64_credentials`
+3. `echo -n "login:password" | openssl base64` - кодировать учетку
+
+`npm login -scope=@your_compony --registry=https://path/` - ещё вариант авторизации, запросит логин/пароль.
+___
