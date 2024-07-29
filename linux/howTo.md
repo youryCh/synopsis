@@ -77,4 +77,7 @@ ___
 
 ___
 
+## Найти wsl ubuntu файлы в винде
 
+`C:/Users/your_user/AppData/Local`
+___
