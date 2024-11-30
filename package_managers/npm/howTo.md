@@ -19,6 +19,8 @@ ___
 
 `nvm use 14` - переключиться на ^14 версию, либо точно указывать версию.
 
+`nvm alias default 22.11.0` - set default node version.
+
 Bash запускать as Admin.
 ___
 
