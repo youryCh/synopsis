@@ -184,4 +184,13 @@ arr.filter((el, idx, arr) => arr.indexOf(el) === idx);
 ```
 ___
 
+## Dynamic optional fields in object
 
+```
+{
+ name: John,
+ surname: Johnson,
+ ...(age && {age: 44})
+}
+```
+___
