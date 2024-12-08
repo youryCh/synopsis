@@ -148,4 +148,6 @@ ___
 `npm rebuild` - ребилдит проект, например при обновлении версии ноды.
 ___
 
-
+## Review installed packages
+`npm ls <package>` - check installed packages with versions.
+___
