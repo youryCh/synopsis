@@ -3,6 +3,7 @@
 `yarn` - короткая команда `yarn install`.
 
 `yarn add <package>` - add package.
+`yarn add -D <package>` - to dev dependencies.
 ___
 
 ## Upgrade dependencies
@@ -17,5 +18,7 @@ ___
 `npx yarn-upgrade-all` - this mpn package will remove all package in package.json and add again with latest version.
 ___
 
+## Review installed packages
 
-
+`yarn why <package>` - list of installed packages.
+___
