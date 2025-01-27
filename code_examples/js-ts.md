@@ -194,3 +194,10 @@ ___
 }
 ```
 ___
+
+## Flatten
+
+```
+const flatten = <T>(array: T[][]): T[] => Array.prototype.concat.apply([], array);
+```
+___
