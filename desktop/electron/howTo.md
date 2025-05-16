@@ -10,7 +10,7 @@
 "scripts": {
     "start": "webpack serve --node-env=development",
     "electron:start": "concurrently \"cross-env yarn start\" \"cross-env NODE_ENV=development wait-on http://localhost:3003 && electron-forge start\"",
-    "electron:package": "concurrently \"cross-env yarn start\" \"cross-env NODE_ENV=development wait-on http://localhost:3003 && electron-forge package\""
+    "electron:package": "electron-forge package"
   }
 ```
 ____
