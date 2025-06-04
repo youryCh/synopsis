@@ -51,3 +51,9 @@ ___
 
 `npm login -scope=@your_compony --registry=https://path/` - ещё вариант авторизации, запросит логин/пароль.
 ___
+
+## Check installed package versions
+
+`npm list <package>` - shows list of project installed package versions.
+___
+
