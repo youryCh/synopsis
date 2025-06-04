@@ -15,3 +15,11 @@ interface IParams {
 const {someKey} = useParams<IParams>();
 ```
 ___
+
+## Fix nested fc typing error
+
+The error appears when using HOC in React.
+
+1. `"@emotion/react": "11.11.1"` - this affects
+2. `"@types/react": "^18.3.18"`
+___
