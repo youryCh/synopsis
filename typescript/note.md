@@ -192,3 +192,12 @@ Built-in conditional types:
  - `ReturnType<F>` - function's return type.
  - `Parameters<F>` - tuple of function's parameters.
 ___
+
+## Parameters type
+
+Utility type, can be used for React function components typing.
+
+```
+type TProps = Parameters<typeof SomeComponent>[0];
+```
+___
