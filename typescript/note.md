@@ -150,3 +150,45 @@ type Account3 = {
 
 In fact `Record`, `Partial`, `Required`, `Readonly`, `Pick` - is mapped type under hood.
 ___
+
+## is
+
+`is` - user-defined type guard.
+
+```
+function isString(a: unknown): a is string {
+  return typeof a === 'string';
+}
+```
+___
+
+## Conditional types
+
+```
+type TIsString<T> = T extends string ? true : false;
+
+type TWithout<T, U> = T extends U ? never : T;
+
+// like mapping through all union type
+type A = TWithout<
+  boolean | number | string,
+  boolean
+>; // number | string
+
+type TElement<T> = T extends (infer U)[] ? U : T;
+```
+
+```
+type TSecondArg<F> = F extends (a: any, b: infer B) => any ? B : never;
+
+type F = typeof Array['prototype']['slice'];
+
+type A = TSecondArg<F>; // number | undefined
+```
+Built-in conditional types:
+ - `Exclude<UnionType, ExcludedMembers>` - constructs a type by excluding members from union.
+ - `Extract<Type, Union>` - constructs a type by extracting from Type all assignable to Union members.
+ - `NonNullable<T>` - excludes `null`, `undefined` from type.
+ - `ReturnType<F>` - function's return type.
+ - `Parameters<F>` - tuple of function's parameters.
+___
