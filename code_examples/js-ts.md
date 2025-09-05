@@ -201,3 +201,16 @@ ___
 const flatten = <T>(array: T[][]): T[] => Array.prototype.concat.apply([], array);
 ```
 ___
+
+## Remove object fields
+
+```
+type TRemoveFields<T, K extends (keyof T)[]> = Omit<T, K[number]>;
+
+const removeObjectFields = <T extends object, K extends (keyof T)[]>(
+  object: T,
+  fields: K
+): TRemoveFields<T, K> =>
+  Object.fromEntries(Object.entries(object).filter(([key]) => !fields.includes(key as (keyof T)))) as T;
+```
+___
