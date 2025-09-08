@@ -33,3 +33,8 @@ ___
   }
 ```
 ___
+
+## Deduplicate dependencies
+
+`yarn dedupe` - удалит дубли зависимостей
+___
