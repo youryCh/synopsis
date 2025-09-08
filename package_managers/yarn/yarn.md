@@ -22,3 +22,14 @@ ___
 
 `yarn why <package>` - list of installed packages.
 ___
+
+## Принудительно фиксировать версию транзитивной зависимости
+
+```
+// package.json
+  ...
+  "resolutions": {
+    "package": "1.0.0"
+  }
+```
+___
