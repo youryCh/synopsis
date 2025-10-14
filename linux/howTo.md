@@ -81,3 +81,35 @@ ___
 
 `C:/Users/your_user/AppData/Local`
 ___
+
+## Добавить SSH ключь в WSL
+
+Существующие ключи валяются в Users/<yser>/.ssh .
+В WSL в ~ директории надо создать такую же структуру: директорию .ssh (просмотр скрытых директорий: ls -la), id_rsa, id_rsa.pub, known_hosts.
+
+И перетащить содержимое соответствующих файлов типа так:
+- vim id_rsa
+- ctrl + v
+- :wq (save & quit)
+- и так все три файла
+
+Затем дать права доступа:
+- chmod 600 /home/<user>/.ssh/id_rsa
+- chmod 700 /home/<user>/.ssh
+___
+
+## Install node.js to WSL
+
+- `sudo apt update && sudo apt upgrade -y` - update packages
+- `sudo apt install -y nodejs npm` - install node.js (12 version)
+
+Для установки последней стабильной версии придётся поставить nvm:
+- `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash` - install nwm
+- reload terminal
+- `nvm install node` - install lts node
+___
+
+## Install nvm
+
+`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash`
+___
