@@ -168,3 +168,17 @@ ___
 2. `git reset --hard branch_2` - по факту сделает ветку branch_1 веткой branch_2 (состояние branch_1 потрётся!)
 3. `git push origin branch_1 -f` - принудительно обновит ремоут ветку branch_1 (без MR)
 ___
+
+## Добавить SSH ключь в WSL
+
+Существующие ключи валяются в Users/<yser>/.ssh .
+В WSL в ~ директории надо создать такую же структуру: директорию .ssh (просмотр скрытых директорий: ls -la), id_rsa, id_rsa.pub, known_hosts.
+И перетащить содержимое соответствующих файлов типа так:
+- vim id_rsa
+- ctrl + v
+- :wq (save & quit)
+- и так все три файла
+Затем дать права доступа:
+- chmod 600 /home/<user>/.ssh/id_rsa
+- chmod 700 /home/<user>/.ssh
+___
