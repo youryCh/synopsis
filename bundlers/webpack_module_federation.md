@@ -104,6 +104,30 @@ export const AnotherComponent: FC = () => {
   ...
 };
 ```
+7. Adding shared store type declaration
+```
+// src/types/global.d.ts
+import type {IItem} from '@somewhere';
+import type {StoreWritable, EventCallable} from 'effector';
+
+declare global {
+  interface IItemsStore {
+    $items: StoreWritable<Partial<IItem>[]>;
+    setItems: EventCallable<Partial<IItem>[]>;
+  }
+}
+
+export {}; // this allows export like module
+
+// src/types/declarations.d.ts
+/// <reference types="react" />
+
+declare module 'root/ItemsStore' {
+  const ItemsStore: IItemsStore;
+
+  export const {$items, setitems} = ItemsStore;
+}
+```
 
 ### To avoid async/await module import error use this:
 ```
