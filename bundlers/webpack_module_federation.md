@@ -101,10 +101,11 @@ export const AnotherComponent: FC = () => {
   useEffect(() => {
     setItems([]);
   }, []);
+  ...
 };
 ```
 
-### To avoid async/await module import use this:
+### To avoid async/await module import error use this:
 ```
 // webpack.config.js
  target: ['web', 'es6'],
