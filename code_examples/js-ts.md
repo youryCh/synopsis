@@ -214,3 +214,13 @@ const removeObjectFields = <T extends object, K extends (keyof T)[]>(
   Object.fromEntries(Object.entries(object).filter(([key]) => !fields.includes(key as (keyof T)))) as T;
 ```
 ___
+
+## Capitalize function
+
+```
+const capitalize = (word) => word.replace(
+ /\w+/g,
+ ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').toLowerCase()}`
+);
+```
+___
