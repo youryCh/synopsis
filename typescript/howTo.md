@@ -23,3 +23,11 @@ The error appears when using HOC in React.
 1. `"@emotion/react": "11.11.1"` - this affects
 2. `"@types/react": "^18.3.18"`
 ___
+
+## to trick noImplicitAny
+
+```
+// global.d.ts
+type TODO_TEMPORAL_ANY = any;
+```
+___
