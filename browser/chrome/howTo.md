@@ -44,3 +44,10 @@ ___
 
 `CTRL+S` just on page
 ___
+
+## Disable AI trash
+
+1. `chrome://flags/` - find 'ai' and disable
+2. `https://github.com/corbindavenport/just-the-browser?tab=readme-ov-file` edit registry instructions, add some helpfull policies
+3. `chrome://policy/` - check policies
+___
