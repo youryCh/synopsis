@@ -39,3 +39,8 @@ ___
 
 `chrome://settings/security` -> Manage certificates -> Import
 ___
+
+## Save HTML page
+
+`CTRL+S` just on page
+___
