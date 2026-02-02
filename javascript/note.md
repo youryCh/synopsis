@@ -287,3 +287,18 @@ ___
    }, []);
    ```
 ___
+
+## Switch case error
+
+'Unexpected lexical declaration in case block' ошибка запрещает объявлять переменные внутри case, т.к. switch-case
+не создаёт своей области видимости. Чтобы обойти ошибку нужно использовать блок {}.
+```
+switch (true) {
+  case index === 1: {
+    const result = 10;
+
+    return result;
+  }
+}
+```
+___
