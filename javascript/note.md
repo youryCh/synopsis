@@ -266,3 +266,24 @@ ___
 
 `(() => {})()` - стрелочный вариант IIFE.
 ___
+
+## Dynamic DOM element params
+
+1. Media query - CSS фича, но есть доступ из JS:
+   `window.matchMedia('(height >= 768px)');`
+2. `window.resize(cb)` - затратная, выполняется при каждом событии resize
+3. ResizeObserver API - позволяет следить за изменением размеров элемента
+   ```
+    useEffect(() => {
+      const observer = new ResizeObserver(([firstEntry]) => {
+        setHeight(firstEntry.contentRect.height); // useState setter
+     });
+
+     observer.observe(element);
+
+     return () => {
+       observer.disconnect();
+     };
+   }, []);
+   ```
+___
