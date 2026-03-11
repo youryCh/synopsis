@@ -468,6 +468,8 @@ ___
 
 > Удалить `.bash_history` - чтобы не палиться.
 
+`history -c && history -w` - очистить историю команд.
+
 ```
 history | grep | ls
 
