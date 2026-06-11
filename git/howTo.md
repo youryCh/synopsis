@@ -184,3 +184,8 @@ ___
 - chmod 600 /home/<user>/.ssh/id_rsa
 - chmod 700 /home/<user>/.ssh
 ___
+
+## Fix WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+
+`ssh-keygen -R "your-host.com"` - remove host from .ssh/known_hosts; then git ask to restore - type "yes"
+___
